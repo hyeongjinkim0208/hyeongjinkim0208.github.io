@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Curriculum vitae of Hyeongjin Kim, economist at the Migration Research & Training Centre (MRTC), Korea.">
+<style>
+  html { color-scheme: light; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<script>
+  try { if (window.self !== window.top) { document.documentElement.classList.add('embedded'); } } catch (e) { document.documentElement.classList.add('embedded'); }
+</script>
+<title>Hyeongjin Kim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400&display=swap">
+<style>
+  :root {
+    --bg: #F6F7F5;
+    --surface: #FFFFFF;
+    --ink: #1A222B;
+    --muted: #5E6A74;
+    --faint: #8B959D;
+    --rule: #D8DDDD;
+    --rule-strong: #B9C2C4;
+    --accent: #1C6B75;
+    --accent-ink: #134C54;
+    --accent-soft: #E0EEF0;
+    --focus: #1C6B75;
+    --display: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --body: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+    --ko: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #131719;
+      --surface: #1B2124;
+      --ink: #E5E9EB;
+      --muted: #9AA5AC;
+      --faint: #6F7B83;
+      --rule: #2A3337;
+      --rule-strong: #3B474D;
+      --accent: #74C5CC;
+      --accent-ink: #9AD8DD;
+      --accent-soft: #16333A;
+      --focus: #74C5CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #131719;
+    --surface: #1B2124;
+    --ink: #E5E9EB;
+    --muted: #9AA5AC;
+    --faint: #6F7B83;
+    --rule: #2A3337;
+    --rule-strong: #3B474D;
+    --accent: #74C5CC;
+    --accent-ink: #9AD8DD;
+    --accent-soft: #16333A;
+    --focus: #74C5CC;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  h1, h2, h3 { margin: 0; font-weight: 500; text-wrap: balance; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding-inline: clamp(16px, 4vw, 40px);
+    padding-block: 36px 72px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 272px minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ---------- Rail ---------- */
+  .rail {
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 28px);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .name {
+    font-family: var(--display);
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .name-ko {
+    font-family: var(--ko);
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .role {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .role .org { color: var(--muted); }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 10px;
+  }
+  .contact { display: flex; flex-direction: column; gap: 10px; }
+  .contact li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .contact li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .contact .lbl { display: block; font-size: 12.5px; color: var(--faint); }
+  .contact .val { font-family: var(--mono); font-size: 13.5px; user-select: all; word-break: break-all; }
+  .copy {
+    font: 500 11.5px/1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 6px 9px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .copy:hover { background: var(--accent-soft); border-color: var(--accent); }
+  .copy[data-done="1"] { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    padding: 5px 0 5px 12px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+  }
+  .nav a .n { font-family: var(--mono); font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .nav a:hover { color: var(--ink); }
+  .nav a.active { color: var(--ink); border-left-color: var(--accent); }
+  .updated { font-size: 13px; color: var(--faint); }
+
+  /* ---------- Main ---------- */
+  .main { display: flex; flex-direction: column; gap: 56px; min-width: 0; }
+  .section { scroll-margin-top: 24px; }
+  .section h2 {
+    font-family: var(--display);
+    font-size: 27px;
+    line-height: 1.15;
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--rule-strong);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .section h2 .count { font-family: var(--mono); font-size: 12px; color: var(--faint); font-weight: 400; font-variant-numeric: tabular-nums; }
+  .note { font-size: 14.5px; color: var(--muted); margin-bottom: 20px; max-width: 66ch; }
+
+  .prose { max-width: 66ch; display: flex; flex-direction: column; gap: 14px; font-size: 17.5px; }
+  .prose .lede { font-family: var(--display); font-size: 22px; line-height: 1.35; font-weight: 400; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .chip {
+    font-size: 14px;
+    padding: 5px 11px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    color: var(--ink);
+    background: var(--surface);
+  }
+
+  /* year-ledger rows shared by every list */
+  .ledger { display: flex; flex-direction: column; }
+  .row {
+    display: grid;
+    grid-template-columns: 7em minmax(0, 1fr);
+    column-gap: 20px;
+    padding-block: 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row:first-child { padding-top: 0; }
+  .row:last-child { border-bottom: 0; }
+  .y {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    padding-top: 4px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .b { max-width: 70ch; display: flex; flex-direction: column; gap: 4px; }
+  .t { font-weight: 600; line-height: 1.4; }
+  .t .me { color: var(--accent-ink); }
+  .meta { font-size: 15px; color: var(--muted); line-height: 1.45; }
+  .meta em { font-style: italic; }
+  .ko { font-family: var(--ko); font-size: 13.5px; color: var(--faint); line-height: 1.5; }
+  .auth { font-size: 15.5px; line-height: 1.45; }
+  .auth .me { font-weight: 600; color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+  .tag.plain { color: var(--muted); background: transparent; border: 1px solid var(--rule); }
+  .doi { font-family: var(--mono); font-size: 12.5px; word-break: break-all; }
+
+  /* compact ledger for the project appendix */
+  .row.compact { padding-block: 10px; }
+  .row.compact .b { gap: 2px; }
+  .row.compact .t { font-weight: 400; }
+  .row.compact .meta { font-size: 14px; }
+
+  footer {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-size: 13.5px;
+    color: var(--faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .rail { position: static; gap: 22px; min-width: 0; }
+    .rail > * { min-width: 0; }
+    .name { font-size: 34px; }
+    .nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-bottom: 6px; margin-inline: -4px; padding-inline: 4px; }
+    .nav a { border-left: 0; border: 1px solid var(--rule-strong); border-radius: 999px; padding: 6px 12px; white-space: nowrap; font-size: 14px; background: var(--surface); }
+    .nav a.active { border-color: var(--accent); background: var(--accent-soft); }
+    .nav a .n { display: none; }
+    .main { gap: 44px; }
+  }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; row-gap: 4px; }
+    .y { padding-top: 0; }
+    .section h2 { font-size: 24px; }
+    .prose .lede { font-size: 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  /* Embedded in another page (e.g. Google Sites): no sticky rail, no smooth scroll */
+  html.embedded .rail { position: static; }
+  html.embedded { scroll-behavior: auto; }
+</style>
+
+<div class="page">
+  <div class="grid">
+
+    <aside class="rail">
+      <div>
+        <h1 class="name">Hyeongjin Kim</h1>
+        <p class="name-ko" lang="ko">김형진</p>
+        <p class="role">Associate Research Fellow<br><span class="org">Migration Research &amp; Training Centre (MRTC), Gyeonggi-do, Korea</span></p>
+      </div>
+
+      <div>
+        <p class="kicker">Contact</p>
+        <ul class="contact">
+          <li>
+            <span><span class="lbl">Email</span><span class="val" id="email-val">hj.kim@mrtc.or.kr</span></span>
+            <button class="copy" type="button" id="copy-email" data-copy="hj.kim@mrtc.or.kr" aria-label="Copy email address">Copy</button>
+          </li>
+          <li>
+            <span><span class="lbl">Office</span><span class="val">+82 2 3788 8039</span></span>
+          </li>
+        </ul>
+      </div>
+
+      <nav aria-label="Sections">
+        <p class="kicker">Contents</p>
+        <div class="nav" id="nav">
+          <a href="#about"><span class="n">01</span>About</a>
+          <a href="#appointments"><span class="n">02</span>Appointments</a>
+          <a href="#education"><span class="n">03</span>Education</a>
+          <a href="#publications"><span class="n">04</span>Journal Articles</a>
+          <a href="#working-papers"><span class="n">05</span>Working Papers</a>
+          <a href="#reports"><span class="n">06</span>Policy Reports</a>
+          <a href="#books"><span class="n">07</span>Books</a>
+          <a href="#honors"><span class="n">08</span>Honors &amp; Grants</a>
+          <a href="#projects"><span class="n">09</span>Research Projects</a>
+        </div>
+      </nav>
+
+      <p class="updated">Last updated September 2026</p>
+    </aside>
+
+    <main class="main">
+
+      <section class="section" id="about">
+        <h2>About</h2>
+        <div class="prose">
+          <p class="lede">An applied microeconomist studying how immigration and place-based policy shape firms, labor markets, and regions in Korea.</p>
+          <p>I am an Associate Research Fellow at the Migration Research &amp; Training Centre (MRTC) in Gyeonggi-do, Korea. My research uses firm-level microdata and geospatial data to examine how foreign workers affect firm productivity, investment, and employment, and how regional policies and industrial agglomeration shape firm performance and regional development. My policy work for MRTC and the Korea Immigration Service includes estimating appropriate work-visa issuance levels and analyzing the economic effects of foreign labor.</p>
+          <p>I received my Ph.D. in Economics from the University of Seoul in 2024.</p>
+        </div>
+        <p class="kicker" style="margin-top:26px">Research interests</p>
+        <div class="chips" style="margin-top:0">
+          <span class="chip">Public Economics</span>
+          <span class="chip">Urban Economics</span>
+          <span class="chip">Development Economics</span>
+          <span class="chip">Labor Economics</span>
+          <span class="chip">Immigration Economics</span>
+        </div>
+      </section>
+
+      <section class="section" id="appointments">
+        <h2>Appointments</h2>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">2024–</div>
+            <div class="b">
+              <p class="t">Associate Research Fellow</p>
+              <p class="meta">Migration Research &amp; Training Centre (MRTC), Gyeonggi-do, Korea · May 2024 to present</p>
+              <p class="ko" lang="ko">이민정책연구원 부연구위원</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="education">
+        <h2>Education</h2>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">2021–2024</div>
+            <div class="b">
+              <p class="t">Ph.D. in Economics, University of Seoul</p>
+              <p class="meta">Dissertation: <em>Three Empirical Studies on the Effects of Regional Policies on Firm Performance and Regional Development</em> · Advisor: Bong Guel Chun</p>
+              <p class="ko" lang="ko">지역정책이 기업성과 및 지역발전에 미치는 영향에 대한 세 가지 실증분석</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2019–2021</div>
+            <div class="b">
+              <p class="t">M.A. in Economics, University of Seoul</p>
+              <p class="meta">Thesis: <em>A Study on the Effects of High-Technology Firms in the Daedeok R&amp;D Specialized Zones</em></p>
+              <p class="ko" lang="ko">대덕연구개발특구를 통해 바라본 첨단기술기업의 성과 분석</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2011–2018</div>
+            <div class="b">
+              <p class="t">B.S. in Electrical and Computer Engineering, University of Seoul</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="publications">
+        <h2>Journal Articles <span class="count">7 peer-reviewed</span></h2>
+        <p class="note">All articles are published in Korean in KCI-listed journals. English titles are those registered with the journal; the original Korean title follows each entry.</p>
+        <div class="ledger">
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">Designing an Industrial Agglomeration Index Using Bilateral Distances and Its Effects on Immigrant Employment</p>
+              <p class="auth"><span class="me">Hyeongjin Kim</span> and Bong Guel Chun</p>
+              <p class="meta"><em>Journal of Social Science</em> (Institute of Social Science, Kangwon National University), 64(1), 205–233</p>
+              <p class="ko" lang="ko">김형진, 전봉걸. 2025. 거리 쌍 산업집적지수 설계와 외국인 고용 효과 분석. 사회과학연구 64(1), 205-233.</p>
+              <p class="doi"><a href="https://doi.org/10.22418/JSS.2025.4.64.1.205" target="_blank" rel="noopener">doi:10.22418/JSS.2025.4.64.1.205</a></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">The Impact of Foreign Workers on Corporate Investment and Employment, and Estimation of Immigration Surplus</p>
+              <p class="auth">Youngbin Seo, <span class="me">Hyeongjin Kim</span>, and Heonjae Song</p>
+              <p class="meta"><em>Korean Journal of Public Finance</em> (Korean Association of Public Finance), 18(1), 47–74</p>
+              <p class="ko" lang="ko">서영빈, 김형진, 송헌재. 2025. 외국인 근로자가 기업의 투자와 고용에 미치는 영향과 이민 잉여 추정. 재정학연구 18(1), 47-74.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">The Effects of the Tax Exemption for Firms' Relocation into Local Areas on SME Performance</p>
+              <p class="auth"><span class="me">Hyeongjin Kim</span> and Bong Guel Chun</p>
+              <p class="meta"><em>Journal of SME Finance</em> (Korea Credit Guarantee Fund), 44(1), 3–21</p>
+              <p class="ko" lang="ko">김형진, 전봉걸. 2024. 지방 이전 기업 조세지원이 중소기업의 성과에 미치는 영향. 중소기업금융연구 44(1), 3-21.</p>
+              <p class="doi"><a href="https://doi.org/10.33219/jsmef.2024.44.1.002" target="_blank" rel="noopener">doi:10.33219/jsmef.2024.44.1.002</a></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2023</div>
+            <div class="b">
+              <p class="t">A Study on the Effects of Onnuri Gift Vouchers on Consumption Promotion</p>
+              <p class="auth">Hongki Kim, <span class="me">Hyeongjin Kim</span>, and Bong Guel Chun</p>
+              <p class="meta"><em>Journal of Korean Economy Studies</em> (Association of Korean Economic Studies), 41(3), 29–54</p>
+              <p class="ko" lang="ko">김홍기, 김형진, 전봉걸. 2023. 온누리상품권 소비촉진 효과와 활성화 방안 연구. 한국경제연구 41(3), 29-54.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2023</div>
+            <div class="b">
+              <p class="t">Analyzing the Effectiveness of Korea R&amp;D-focused Innovation Cluster and the Lab Enterprise</p>
+              <p class="auth"><span class="me">Hyeongjin Kim</span>, Changho Yu, and Bong Guel Chun</p>
+              <p class="meta"><em>Journal of Market Economy</em> (Nam Duck-Woo Economic Research Institute, Sogang University), 52(1), 25–58</p>
+              <p class="ko" lang="ko">김형진, 유창호, 전봉걸. 2023. 연구개발특구 입주와 연구소기업의 효과 분석. 시장경제연구 52(1), 25-58.</p>
+              <p class="doi"><a href="https://doi.org/10.38162/JOME.52.1.2" target="_blank" rel="noopener">doi:10.38162/JOME.52.1.2</a></p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2023</div>
+            <div class="b">
+              <p class="t">An Analysis of the Effectiveness of the Tax Incentive for the Establishment and Operation of Corporate Sports Teams</p>
+              <p class="auth"><span class="me">Hyeongjin Kim</span> and Bong Guel Chun</p>
+              <p class="meta"><em>Korean Journal of Sport Management</em> (Korean Society for Sport Management), 28(1), 32–43</p>
+              <p class="ko" lang="ko">김형진, 전봉걸. 2023. 기업의 운동경기부 설치·운영에 대한 조세특례제도의 효과성 분석. 한국스포츠산업경영학회지 28(1), 32-43.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2020</div>
+            <div class="b">
+              <p class="t">A Study on the Effects of the Designation of High-Technology Firms in the R&amp;D Specialized Zones</p>
+              <p class="auth"><span class="me">Hyeongjin Kim</span> and Bong Guel Chun</p>
+              <p class="meta"><em>Industrial Innovation Research</em> (Institute for Industrial Development, Kyungsung University), 36(4), 29–54</p>
+              <p class="ko" lang="ko">김형진, 전봉걸. 2020. 연구개발특구 첨단기술기업 지정에 대한 효과 분석. 산업혁신연구 36(4), 29-54.</p>
+              <p class="doi"><a href="https://doi.org/10.22793/indinn.2020.36.4.002" target="_blank" rel="noopener">doi:10.22793/indinn.2020.36.4.002</a></p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="working-papers">
+        <h2>Working Papers <span class="count">5</span></h2>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Foreign Workers and Automatability</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Regional Spillovers of the Shipbuilding Labor Inflow Shock</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Low-Skilled Immigrant Hiring Does Not Lower Firm Productivity: Evidence from Korean Manufacturing SMEs</p>
+              <p class="auth">with J. Y. So, C. Choe, and H. Song</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">The Effects of the Immigrant Labor Force on Firms' Investment and R&amp;D</p>
+              <p class="auth">with H. Song</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Industrial Parks at Maturity: Plant-Level Evidence from Korea</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reports">
+        <h2>Policy Research Reports <span class="count">17</span></h2>
+        <p class="note">Reports written for the Migration Research &amp; Training Centre (MRTC) and the Korea Immigration Service (KIS), Ministry of Justice. Titles are translated from Korean; the original title follows each entry.</p>
+        <div class="ledger">
+
+          <div class="row">
+            <div class="y">Forthcoming</div>
+            <div class="b">
+              <p class="t">Short-Term Labor Market Indicators for Determining Sectors Open to Foreign Workers</p>
+              <p class="meta">MRTC Basic Research Report</p>
+              <p class="ko" lang="ko">외국인 도입 허용분야 설정을 위한 단기 노동시장 지표 분석</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">Forthcoming</div>
+            <div class="b">
+              <p class="t">Strategies and Tax Systems of Major Countries for Attracting Global Talent</p>
+              <p class="meta">MRTC Basic Research Report</p>
+              <p class="ko" lang="ko">글로벌 인재 유치를 위한 주요국의 전략 및 조세제도 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">Forthcoming</div>
+            <div class="b">
+              <p class="t">Estimating the Appropriate Scale of Foreign Inflows and Analyzing Their Economic and Social Impacts</p>
+              <p class="meta">Korea Immigration Service, Ministry of Justice</p>
+              <p class="ko" lang="ko">외국인 유입 적정규모 산정 및 외국인 유입의 경제·사회적 영향 분석</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">Forthcoming</div>
+            <div class="b">
+              <p class="t">A Study on Wage Requirements for Work Visas</p>
+              <p class="meta">Korea Immigration Service, Ministry of Justice · co-authored</p>
+              <p class="ko" lang="ko">취업비자 임금요건 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2026</div>
+            <div class="b">
+              <p class="t">Equity between Contributions and Benefits: Evidence from Retroactive Contribution Cases of Foreign Nationals in the National Pension</p>
+              <p class="meta">MRTC Brief (Issue) No. 2026-03 · with Junhong Ahn (National Pension Research Institute)</p>
+              <p class="ko" lang="ko">김형진, 안준홍. 2026. 외국인 국민연금 추납 사례로 본 기여와 급여의 형평성. 이민정책연구원, MRTC Brief(Issue) 2026-03.</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2026</div>
+            <div class="b">
+              <p class="t">The Need for Emigration Statistics on Korean Nationals to Respond to Brain Drain</p>
+              <p class="meta">MRTC Brief (Issue)</p>
+              <p class="ko" lang="ko">두뇌 유출(Brain Drain) 대응을 위한 내국인 이주 통계의 필요성</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">The Effects of Foreign Worker Employment on Establishment Productivity and Ways to Enhance Them</p>
+              <p class="meta">MRTC Basic Research Report</p>
+              <p class="ko" lang="ko">외국인 고용의 사업체 생산성 효과와 제고 방안 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">The Distribution of Living Infrastructure in Areas with Concentrated Foreign Residents: A Geolocation Data Approach</p>
+              <p class="meta">MRTC Basic Research Report</p>
+              <p class="ko" lang="ko">지리위치정보 자료를 활용한 외국인 집중거주지역 생활인프라 분포 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">The Social and Economic Impacts of International Student Inflows to Korea</p>
+              <p class="meta">MRTC Basic Research Report · co-authored</p>
+              <p class="ko" lang="ko">국내 유학생 유입(유치)의 사회·경제적 영향 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">Survey and Quantitative Analysis for Estimating the Appropriate Scale of Work Visa Issuance</p>
+              <p class="meta">Korea Immigration Service, Ministry of Justice · co-authored</p>
+              <p class="ko" lang="ko">적정수준의 취업비자 발급 규모 산정을 위한 실태조사·계량분석 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Survey and Quantitative Analysis for Introducing the Advance Announcement System for Work Visa Issuance Quotas</p>
+              <p class="meta">Korea Immigration Service, Ministry of Justice · co-authored</p>
+              <p class="ko" lang="ko">「취업비자 발급규모 사전 공표제」 도입을 위한 실태조사·계량분석 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Immigration and the Economy (I): A Comprehensive Analysis of the Economic Activities of Foreign Residents and Their Impact on the Korean Economy</p>
+              <p class="meta">MRTC Basic Research Report · co-authored</p>
+              <p class="ko" lang="ko">이민과 경제 (I): 국내 거주 외국인의 경제활동과 국내 경제에 미치는 영향에 관한 종합적 분석</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Policy Outlook for Introducing Foreign Workers in Care Services</p>
+              <p class="meta">MRTC Basic Research Report · co-authored</p>
+              <p class="ko" lang="ko">돌봄서비스 외국인력 도입 정책 전망</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">The Effects of Foreign Workers on Firms' Investment and R&amp;D Activities and Future Tasks: A Regional-Level Empirical Analysis</p>
+              <p class="meta">MRTC Policy Report</p>
+              <p class="ko" lang="ko">외국인근로자가 기업의 투자 및 연구개발 활동에 미치는 영향과 향후과제: 지역단위 실증분석</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Investment Immigration in Korea: Current Status and Challenges</p>
+              <p class="meta">MRTC Issue Brief</p>
+              <p class="ko" lang="ko">국내 투자이민제도의 현황과 과제</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Industrial Agglomeration, Location Choice, and Foreign Worker Employment</p>
+              <p class="meta">MRTC Working Paper</p>
+              <p class="ko" lang="ko">산업집적과 입지 선택, 외국인 고용에 대한 연구</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Foreign Workers in Registered Factories Nationwide: Status and Regional Distribution (2010–2023)</p>
+              <p class="meta">MRTC Statistics Brief</p>
+              <p class="ko" lang="ko">전국 등록공장 외국인 근로자 현황과 지역 분포(2010~2023)</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="books">
+        <h2>Books</h2>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">2025</div>
+            <div class="b">
+              <p class="t">The Future We Must Prepare for Now</p>
+              <p class="meta">Korea Economic Research Institute et al. · RH Korea · contributing author</p>
+              <p class="ko" lang="ko">한국경제연구원 외. 2025. 지금, 우리가 준비해야 할 미래. ㈜알에이치코리아.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="honors">
+        <h2>Honors, Awards, and Grants</h2>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">2024</div>
+            <div class="b">
+              <p class="t">Outstanding Paper Award</p>
+              <p class="meta">University of Seoul</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2023–2024</div>
+            <div class="b">
+              <p class="t">Doctoral Course Research Grant</p>
+              <p class="meta">Ministry of Education</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2023</div>
+            <div class="b">
+              <p class="t">Outstanding Paper Award</p>
+              <p class="meta">University of Seoul</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2021–2024</div>
+            <div class="b">
+              <p class="t">Doctoral Fellowship</p>
+              <p class="meta">University of Seoul</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">2019–2021</div>
+            <div class="b">
+              <p class="t">Graduate Student Scholarship</p>
+              <p class="meta">University of Seoul</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="projects">
+        <h2>Other Research Projects <span class="count">39 · 2017–2024</span></h2>
+        <p class="note">Research assistant (student researcher where noted). Most projects are demand and benefit estimations for feasibility studies of public investment projects, commissioned by the Korea Development Institute (KDI), the Korea Research Institute for Local Administration (KRILA), and the Korea Local Finance Association (KLFA).</p>
+        <div class="ledger">
+
+          <div class="row compact"><div class="y">2024</div><div class="b"><p class="t">Songpa ICT Security Cluster Development, Phase 2 — preliminary feasibility study for a public-institution project, demand and benefit estimation (development component)</p><p class="meta">KDI</p></div></div>
+
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Seoul Startup Hub Gwanak (knowledge industry center) — demand and benefit estimation</p><p class="meta">KLFA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Busan Regional Innovation Project based on Local Government–University Cooperation — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Establishment of Daejeon Investment Finance Co. — feasibility review, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Pyeongtaek Gagok District Urban Development Project — feasibility re-assessment, demand and benefit estimation (support facilities)</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Pyeongtaek Manho District Urban Development Project — feasibility re-assessment, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Chonnam National University Campus Innovation Park — feasibility study, demand and benefit estimation</p><p class="meta">KLFA</p></div></div>
+          <div class="row compact"><div class="y">2023</div><div class="b"><p class="t">Suwon R&amp;D Science Park — feasibility re-assessment, demand and benefit estimation (office facilities)</p><p class="meta">KRILA</p></div></div>
+
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Emissions trading business models of EU firms</p><p class="meta">SK Gas</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Public perceptions of the hydrogen economy and hydrogen–nuclear coupling, and ways to create synergies</p><p class="meta">Korea Energy Economics Institute (KEEI)</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Sinan Aphae Agro-Industrial Complex — demand and benefit estimation</p><p class="meta">KLFA</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">In-depth evaluation of tax reductions for relocating headquarters and factories outside the Seoul Metropolitan Area — firm survey analysis and empirical analysis of effectiveness</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Anseong Dongsin General Industrial Complex — preliminary feasibility study for a public-institution project, demand and benefit estimation</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">KAI Rotorcraft Flight Center, Jinju — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Daejeon–Sejong–Chungnam Regional Innovation Project based on Local Government–University Cooperation — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Guri E-Commerce Logistics Complex — preliminary feasibility study for a public-institution project, demand and benefit estimation</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2022</div><div class="b"><p class="t">Jincheon Megapolis General Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Gimje Jipyeongseon Smart Green Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Gimcheon New General Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Voluntary in-depth evaluation of the tax incentive for the establishment and operation of corporate sports teams — effectiveness analysis</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Daejeon Southwest Sports Town — feasibility study, demand and benefit estimation (industrial facilities)</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Daedeok Innopolis Convergence Research Innovation Center, Daejeon — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Goesan Megapolis General Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2021</div><div class="b"><p class="t">Chuncheon Urban High-Tech Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Yangju Eunnam General Industrial Complex — second feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Changnyeong Yeongnam General Industrial Complex — preliminary feasibility study for a public-institution project, demand and benefit estimation</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Reforming the management system of the overseas resource development loan program</p><p class="meta">Korea Energy Agency (KEA)</p></div></div>
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Chungju Bio-Health National Industrial Complex — preliminary feasibility study for a public-institution project, demand and benefit estimation</p><p class="meta">KDI</p></div></div>
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Seoul Magok M-Convergence Campus — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2020</div><div class="b"><p class="t">Bucheon Okgil Public Knowledge Industry Center for Startup Growth — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+
+          <div class="row compact"><div class="y">2019</div><div class="b"><p class="t">Samcheok Smart General Industrial Complex — demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2019</div><div class="b"><p class="t">Namyangju Furniture Complex Industrial Park — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+          <div class="row compact"><div class="y">2019</div><div class="b"><p class="t">Chungju Dream Park Industrial Complex — feasibility study, demand and benefit estimation</p><p class="meta">KRILA</p></div></div>
+
+          <div class="row compact"><div class="y">2017</div><div class="b"><p class="t">X-TWICE Practical Problem Research Group</p><p class="meta">Ministry of Science, ICT and Future Planning</p></div></div>
+          <div class="row compact"><div class="y">2017</div><div class="b"><p class="t">A new millimeter-wave radio-over-fiber (RoF) system architecture for gigabit wireless signal transmission</p><p class="meta">National Research Foundation of Korea (NRF) · student researcher</p></div></div>
+
+        </div>
+      </section>
+
+      <footer>
+        <span>Hyeongjin Kim · Migration Research &amp; Training Centre</span>
+        <span>Korean-language works are listed with English titles; original titles appear beneath each entry.</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // Copy email with clipboard fallback
+    var btn = document.getElementById('copy-email');
+    var val = document.getElementById('email-val');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.getAttribute('data-copy');
+        function done() {
+          btn.textContent = 'Copied';
+          btn.setAttribute('data-done', '1');
+          setTimeout(function () { btn.textContent = 'Copy'; btn.removeAttribute('data-done'); }, 1600);
+        }
+        function fallback() {
+          try {
+            var range = document.createRange();
+            range.selectNodeContents(val);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            btn.textContent = 'Selected';
+            setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+          } catch (e) {}
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, fallback);
+        } else {
+          fallback();
+        }
+      });
+    }
+
+    // Highlight the section in view
+    var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+    var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+    if ('IntersectionObserver' in window && sections.length) {
+      var current = null;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { current = en.target.id; }
+        });
+        if (!current) return;
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+        });
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+  })();
+</script>
+
+</body>
+</html>
