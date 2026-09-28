@@ -302,8 +302,12 @@
         <p class="kicker">Contact</p>
         <ul class="contact">
           <li>
-            <span><span class="lbl">Email</span><span class="val" id="email-val">hj.kim@mrtc.or.kr</span></span>
-            <button class="copy" type="button" id="copy-email" data-copy="hj.kim@mrtc.or.kr" aria-label="Copy email address">Copy</button>
+            <span><span class="lbl">Email (work)</span><span class="val" id="email-val">hj.kim@mrtc.or.kr</span></span>
+            <button class="copy" type="button" id="copy-email" data-copy="hj.kim@mrtc.or.kr" aria-label="Copy work email address">Copy</button>
+          </li>
+          <li>
+            <span><span class="lbl">Email (personal)</span><span class="val" id="email2-val">skdmlrhkd@gmail.com</span></span>
+            <button class="copy" type="button" id="copy-email2" data-copy="skdmlrhkd@gmail.com" aria-label="Copy personal email address">Copy</button>
           </li>
           <li>
             <span><span class="lbl">Office</span><span class="val">+82 2 3788 8039</span></span>
@@ -790,10 +794,9 @@
 
 <script>
   (function () {
-    // Copy email with clipboard fallback
-    var btn = document.getElementById('copy-email');
-    var val = document.getElementById('email-val');
-    if (btn) {
+    // Copy buttons with clipboard fallback
+    Array.prototype.forEach.call(document.querySelectorAll('.copy[data-copy]'), function (btn) {
+      var val = btn.parentElement.querySelector('.val');
       btn.addEventListener('click', function () {
         var text = btn.getAttribute('data-copy');
         function done() {
@@ -818,7 +821,7 @@
           fallback();
         }
       });
-    }
+    });
 
     // Highlight the section in view
     var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
