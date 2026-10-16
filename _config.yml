@@ -1,0 +1,4 @@
+# 공개 페이지에는 index.html 만 내보낸다
+exclude:
+  - CV_갱신절차.md
+  - tools
