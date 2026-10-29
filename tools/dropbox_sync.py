@@ -119,4 +119,8 @@ def push(work):
 if __name__ == "__main__":
     if len(sys.argv) != 3 or sys.argv[1] not in ("pull", "push"):
         sys.exit(__doc__)
+    missing = [k for k in ("DROPBOX_APP_KEY", "DROPBOX_APP_SECRET", "DROPBOX_REFRESH_TOKEN") if not os.environ.get(k)]
+    if missing:
+        print("::warning::Dropbox 열쇠가 저장소 Secrets 에 없어 이번 회차를 건너뜀: " + ", ".join(missing))
+        sys.exit(0)
     {"pull": pull, "push": push}[sys.argv[1]](pathlib.Path(sys.argv[2]))
