@@ -897,6 +897,111 @@
   })();
 </script>
 
+<script>
+  // Working Papers: Claude 안에서 이 페이지를 열면 Dropbox 의 논문 상태 기록(_paper_status.json)과
+  // CV 반영 기록(_cv_entries.json)으로 바로 다시 그림, 그 밖(GitHub Pages 등)에서는 위의 정적 목록 그대로
+  // 규칙은 tools/build_working_papers.py 와 같음(CV_갱신절차.md 7절)
+  (function () {
+    if (!window.claude || typeof window.claude.use !== 'function') return;
+    var FILES = { status: '/Research/working/_paper_status.json', entries: '/Research/working/_cv_entries.json' };
+    var BY_STAGE = { review: 'Submitted', rr: 'Revise and resubmit', accepted: 'Forthcoming', published: 'Published' };
+    var S_RANK = { 'Forthcoming': 0, 'Revise and resubmit': 1, 'Submitted': 2, 'In progress': 3 };
+    var G_RANK = { ready: 0, drafting: 1, analysis: 2, design: 3, unknown: 4 };
+    var THE = ['Journal of', 'Review of', 'Annals of', 'Quarterly Journal', 'International Journal'];
+    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var got = {};
+
+    function parse(result) {
+      var p = result && result.payload;
+      if (typeof p === 'string') { try { p = JSON.parse(p); } catch (e) { return null; } }
+      if (!p || typeof p.text !== 'string') return null;
+      try { return JSON.parse(p.text); } catch (e) { return null; }
+    }
+    function monthYear(iso) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+      return m ? MONTHS[Number(m[2]) - 1] + ' ' + m[1] : '';
+    }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text) e.textContent = text;
+      return e;
+    }
+    function render() {
+      var doc = got.status, ent = got.entries;
+      if (!doc || !ent || !Array.isArray(doc.papers)) return;
+      var sec = document.getElementById('working-papers');
+      var ledger = sec && sec.querySelector('.ledger');
+      if (!ledger) return;
+      var ov = ent.overrides || {};
+      var rows = [];
+      doc.papers.forEach(function (p, i) {
+        var cv = ov[p.paper_id] || p.cv || {};
+        if (!cv.list) return;
+        var status = BY_STAGE[p.stage] || 'In progress';
+        if (status === 'Published') return;
+        var journal = status === 'In progress' ? '' : (cv.journal || String(p.target_journal || '').replace(/\s*[\(（].*$/, '').trim());
+        rows.push({ i: i, status: status, journal: journal, title: String(cv.title || p.title || '').trim(),
+          authors: String(cv.authors || '').trim(), sub: String(p.submitted_on || ''), stage: p.stage || 'unknown' });
+      });
+      rows.sort(function (a, b) {
+        var da = a.status === 'Submitted' && a.sub ? Number(a.sub.replace(/-/g, '')) : 0;
+        var db = b.status === 'Submitted' && b.sub ? Number(b.sub.replace(/-/g, '')) : 0;
+        var ga = a.status === 'In progress' ? (G_RANK[a.stage] !== undefined ? G_RANK[a.stage] : 9) : 0;
+        var gb = b.status === 'In progress' ? (G_RANK[b.stage] !== undefined ? G_RANK[b.stage] : 9) : 0;
+        return (S_RANK[a.status] - S_RANK[b.status]) || (db - da) || (ga - gb) || (a.i - b.i);
+      });
+      ledger.replaceChildren.apply(ledger, rows.map(function (r) {
+        var row = el('div', 'row');
+        var b = el('div', 'b');
+        row.append(el('div', 'y', r.status), b);
+        b.append(el('p', 't', r.title));
+        if (r.authors) b.append(el('p', 'auth', r.authors));
+        var meta = null;
+        if (r.status === 'Submitted') {
+          var when = monthYear(r.sub);
+          var the = THE.some(function (x) { return r.journal.indexOf(x) === 0; }) ? 'the ' : '';
+          meta = ['Submitted to ' + the, r.journal, when ? ', ' + when : ''];
+        } else if (r.status === 'Revise and resubmit') {
+          meta = ['Revise and resubmit, ', r.journal, ''];
+        } else if (r.status === 'Forthcoming') {
+          meta = ['', r.journal, ', forthcoming'];
+        }
+        if (meta) {
+          var m = el('p', 'meta');
+          m.append(document.createTextNode(meta[0]), el('em', null, meta[1]), document.createTextNode(meta[2]));
+          b.append(m);
+        }
+        return row;
+      }));
+      var count = sec.querySelector('h2 .count');
+      if (count) count.textContent = String(rows.length);
+    }
+
+    window.claude.use('mcp').then(function (mcp) {
+      if (!mcp) return;
+      Object.keys(FILES).forEach(function (key) {
+        var retried = false;
+        function take(result) {
+          var d = parse(result);
+          if (d) { got[key] = d; render(); }
+        }
+        mcp.watchTool('Dropbox', 'fetch', { id: FILES[key] }, function (ev) {
+          if (ev.type === 'data') { take(ev.result); return; }
+          var err = ev.error || {};
+          // 지켜보기가 안 되는 화면이거나 잠깐 실패했으면 한 번만 다시 읽음, 그 밖의 실패는 정적 목록을 그대로 둠
+          if (!retried && (err.code === 'bad_request' || err.retryable)) {
+            retried = true;
+            setTimeout(function () {
+              mcp.callTool('Dropbox', 'fetch', { id: FILES[key] }).then(take, function () {});
+            }, Math.min(err.retryAfterMs || 1500, 10000) + Math.random() * 1000);
+          }
+        });
+      });
+    }, function () {});
+  })();
+</script>
+
 <!-- CV-BODY-END -->
 </body>
 </html>

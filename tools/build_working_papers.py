@@ -7,6 +7,7 @@
   python3 tools/build_working_papers.py --status <경로>      # 상태 파일 위치(기본 ~/Dropbox/Research/working/_paper_status.json), 읽기만 함
   python3 tools/build_working_papers.py --entries <경로>     # CV 반영 기록 파일 위치(기본 ~/Dropbox/Research/working/_cv_entries.json)
   python3 tools/build_working_papers.py --no-mark            # HTML 만 고치고 CV 반영 기록 파일은 건드리지 않음
+  python3 tools/build_working_papers.py --backup-name <이름>  # 사본을 로컬에 만들지 않고 changelog 에 이 이름만 적음(GitHub 자동 반영용, 사본은 tools/dropbox_sync.py 가 Dropbox 에 만듦)
 
 규칙(CV_갱신절차.md 4절, 7절)
   - CV 표기 칸(list, title, authors, journal)은 CV 반영 기록 파일의 overrides 에 그 원고가 있으면 그것, 없으면 상태 파일의 cv 칸을 씀
@@ -137,6 +138,7 @@ def main():
     ap.add_argument("--check", action="store_true", help="고치지 않고 갱신이 필요한 줄만 보여 줌")
     ap.add_argument("--no-mark", action="store_true", help="CV 반영 기록 파일을 쓰지 않음")
     ap.add_argument("--today", default=None, help="날짜를 지정(YYYY-MM-DD), 기본은 오늘")
+    ap.add_argument("--backup-name", default=None, help="CV 반영 기록 사본 이름(로컬 사본을 만들지 않음)")
     args = ap.parse_args()
 
     doc = json.loads(pathlib.Path(args.status).expanduser().read_text(encoding="utf-8"))
@@ -191,7 +193,10 @@ def main():
     if not touched and not gone:
         print("CV 반영 기록: 변경 없음")
         return
-    dest = backup(entries_path, today) if entries_path.exists() else None
+    if args.backup_name:
+        dest = pathlib.Path(args.backup_name)
+    else:
+        dest = backup(entries_path, today) if entries_path.exists() else None
     ent["updated"] = stamp
     ent.setdefault("changelog", []).append(
         f"{stamp}: Working Papers 절을 다시 만들고 synced 를 고침({', '.join(touched + gone)})"

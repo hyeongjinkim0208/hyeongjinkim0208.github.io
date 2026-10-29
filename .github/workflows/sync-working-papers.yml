@@ -1,0 +1,53 @@
+# Dropbox 의 논문 상태 기록(_paper_status.json)이 바뀌면 CV 의 Working Papers 절을 맞춘다
+# 10분마다 돌고, Actions 탭에서 "Run workflow" 로 바로 돌릴 수도 있다(CV_갱신절차.md 7절)
+name: Sync Working Papers
+
+on:
+  schedule:
+    - cron: "7,17,27,37,47,57 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-working-papers
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dropbox 에서 받아 Working Papers 절 만들기
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: python3 tools/dropbox_sync.py pull "$RUNNER_TEMP/cv"
+
+      - name: 바뀌었으면 index.html 커밋
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "index.html 변경 없음"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "CV: sync Working Papers with paper status ($(TZ=Asia/Seoul date +%F))"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: CV 반영 기록을 Dropbox 에 올리기
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        run: python3 tools/dropbox_sync.py push "$RUNNER_TEMP/cv"
