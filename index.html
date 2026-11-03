@@ -344,6 +344,7 @@
         <div class="prose">
           <p class="lede">An applied microeconomist studying how immigration and place-based policy shape firms, labor markets, and regions in Korea.</p>
           <p>I am an Associate Research Fellow at the Migration Research &amp; Training Centre (MRTC) in Gyeonggi-do, Korea. My research uses firm-level microdata and geospatial data to examine how foreign workers affect firm productivity, investment, and employment, and how regional policies and industrial agglomeration shape firm performance and regional development. My policy work for MRTC and the Korea Immigration Service includes estimating appropriate work-visa issuance levels and analyzing the economic effects of foreign labor.</p>
+          <p>My work began in regional and public economics, evaluating R&amp;D-zone designations, tax incentives for firm relocation, and industrial park development with firm- and plant-level data. After joining MRTC I carried the same spatial tools into immigration, asking how firms recruit foreign workers, substitute between labor and automation, and adjust when guest-worker inflows stop. Recent projects extend this in two directions: toward industrial organization, with work on entry regulation and chain store location, and toward measurement itself, including how a change in official foreign-resident counts affects shift-share instruments and how large language models are reshaping the language of journal abstracts.</p>
           <p>I received my Ph.D. in Economics from the University of Seoul in 2024.</p>
         </div>
         <p class="kicker" style="margin-top:26px">Research interests</p>
@@ -484,6 +485,13 @@
         <h2>Working Papers <span class="count">9</span></h2>
         <div class="ledger">
           <div class="row">
+            <div class="y">Under review</div>
+            <div class="b">
+              <p class="t">Industrial Parks, Local Employment, and Land Values: Evidence from Korea</p>
+              <p class="meta">Under review at the <em>Journal of Public Economics</em>, submitted October 2026</p>
+            </div>
+          </div>
+          <div class="row">
             <div class="y">Submitted</div>
             <div class="b">
               <p class="t">Employer-Tied Immigration and Local Economic Adjustment: Evidence from Korean Shipbuilding</p>
@@ -495,13 +503,6 @@
             <div class="b">
               <p class="t">When Guest Workers Stopped Coming: Firm Investment and R&amp;D in Korea</p>
               <p class="meta">Submitted to the <em>Journal of Population Economics</em>, November 2026</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="y">Submitted</div>
-            <div class="b">
-              <p class="t">Industrial Parks, Local Employment, and Land Values: Evidence from Korea</p>
-              <p class="meta">Submitted to the <em>Journal of Public Economics</em>, October 2026</p>
             </div>
           </div>
           <div class="row">
@@ -906,7 +907,8 @@
     if (!window.claude || typeof window.claude.use !== 'function') return;
     var FILES = { status: '/Research/working/_paper_status.json', entries: '/Research/working/_cv_entries.json' };
     var BY_STAGE = { review: 'Submitted', rr: 'Revise and resubmit', accepted: 'Forthcoming', published: 'Published' };
-    var S_RANK = { 'Forthcoming': 0, 'Revise and resubmit': 1, 'Submitted': 2, 'In progress': 3 };
+    var S_RANK = { 'Forthcoming': 0, 'Revise and resubmit': 1, 'Under review': 2, 'Submitted': 3, 'In progress': 4 };
+    var UR_WORDS = ['심사 시작', 'under review'];
     var G_RANK = { ready: 0, drafting: 1, analysis: 2, design: 3, unknown: 4 };
     var THE = ['Journal of', 'Review of', 'Annals of', 'Quarterly Journal', 'International Journal'];
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -917,6 +919,19 @@
       if (typeof p === 'string') { try { p = JSON.parse(p); } catch (e) { return null; } }
       if (!p || typeof p.text !== 'string') return null;
       try { return JSON.parse(p.text); } catch (e) { return null; }
+    }
+    function plainJournal(s) {
+      return String(s || '').replace(/\s*[\(（].*$/, '').trim().toLowerCase();
+    }
+    function underReview(p, journal) {
+      if (p.stage !== 'review') return false;
+      var since = String(p.submitted_on || '');
+      return (Array.isArray(p.events) ? p.events : []).some(function (ev) {
+        var text = (String(ev.event || '') + ' ' + String(ev.note || '')).toLowerCase();
+        return UR_WORDS.some(function (w) { return text.indexOf(w) >= 0; })
+          && plainJournal(ev.journal) === plainJournal(journal)
+          && String(ev.date || '') >= since;
+      });
     }
     function monthYear(iso) {
       var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
@@ -942,12 +957,13 @@
         var status = BY_STAGE[p.stage] || 'In progress';
         if (status === 'Published') return;
         var journal = status === 'In progress' ? '' : (cv.journal || String(p.target_journal || '').replace(/\s*[\(（].*$/, '').trim());
+        if (status === 'Submitted' && underReview(p, journal)) status = 'Under review';
         rows.push({ i: i, status: status, journal: journal, title: String(cv.title || p.title || '').trim(),
           authors: String(cv.authors || '').trim(), sub: String(p.submitted_on || ''), stage: p.stage || 'unknown' });
       });
       rows.sort(function (a, b) {
-        var da = a.status === 'Submitted' && a.sub ? Number(a.sub.replace(/-/g, '')) : 0;
-        var db = b.status === 'Submitted' && b.sub ? Number(b.sub.replace(/-/g, '')) : 0;
+        var da = (a.status === 'Submitted' || a.status === 'Under review') && a.sub ? Number(a.sub.replace(/-/g, '')) : 0;
+        var db = (b.status === 'Submitted' || b.status === 'Under review') && b.sub ? Number(b.sub.replace(/-/g, '')) : 0;
         var ga = a.status === 'In progress' ? (G_RANK[a.stage] !== undefined ? G_RANK[a.stage] : 9) : 0;
         var gb = b.status === 'In progress' ? (G_RANK[b.stage] !== undefined ? G_RANK[b.stage] : 9) : 0;
         return (S_RANK[a.status] - S_RANK[b.status]) || (db - da) || (ga - gb) || (a.i - b.i);
@@ -963,6 +979,10 @@
           var when = monthYear(r.sub);
           var the = THE.some(function (x) { return r.journal.indexOf(x) === 0; }) ? 'the ' : '';
           meta = ['Submitted to ' + the, r.journal, when ? ', ' + when : ''];
+        } else if (r.status === 'Under review') {
+          var the2 = THE.some(function (x) { return r.journal.indexOf(x) === 0; }) ? 'the ' : '';
+          var when2 = monthYear(r.sub);
+          meta = ['Under review at ' + the2, r.journal, when2 ? ', submitted ' + when2 : ''];
         } else if (r.status === 'Revise and resubmit') {
           meta = ['Revise and resubmit, ', r.journal, ''];
         } else if (r.status === 'Forthcoming') {

@@ -26,7 +26,7 @@
 - 지도교수와 공저자 전봉걸은 "Bong Guel Chun"으로 적는다
 - 국문 발표물은 영문 제목을 먼저 쓰고 국문 원제를 아래에 병기한다
 - 위탁 기관은 실제 수행 센터가 아니라 상위 기관 약어로 적는다(LIMAC은 KRILA, LOMAC은 LOFA)
-- 연도 칸은 게재 연도, Forthcoming, Revise and resubmit, Submitted, In progress 중 하나로 쓴다
+- 연도 칸은 게재 연도, Forthcoming, Revise and resubmit, Under review, Submitted, In progress 중 하나로 쓴다
 - 연구비는 지원 기관, 재원 부처, 과제번호를 함께 적는다(예: National Research Foundation of Korea (NRF), funded by the Ministry of Education · NRF-2023S1A5B5A19093456)
 - 원고번호(manuscript number)는 CV에 넣지 않는다
 - Working Papers 의 제목은 Title Case 로 적고, 학술지가 붙이는 접두어(JUE Insight: 등)와 국문 메모는 뺀다, 원고 제목이 다른 꼴이면 _cv_entries.json 의 overrides 에 CV 표기를 적는다
@@ -36,6 +36,7 @@
 - 아래 사건이 생기면 상태 파일의 그 원고 줄을 먼저 고친다(원고 폴더 세션의 CLAUDE.md 규칙), Working Papers 절은 거기서 자동으로 따라온다
   - 제목 확정이나 변경 → title(CV 표기가 다르면 _cv_entries.json 의 overrides 에 그 원고의 title)
   - 투고 → stage review, submitted_on, target_journal, 연도 칸은 Submitted, 설명은 "Submitted to (the) *학술지명*, 월 연도"
+  - 심사 시작(데스크 통과) → stage 는 review 그대로 두고 events 에 그 학술지의 "심사 시작" 줄(날짜, 저널)을 더한다, 연도 칸은 Under review, 설명은 "Under review at (the) *학술지명*, submitted 월 연도"
   - 수정 요청 → stage rr, 설명은 "Revise and resubmit, *학술지명*"
   - 채택 → stage accepted, 설명은 "*학술지명*, forthcoming"
   - 게재 → stage published, 스크립트가 Working Papers 에서 빼고 알려 주면 Journal Articles 로 손으로 옮기고 권, 호, 쪽수, DOI를 넣는다
@@ -68,7 +69,8 @@
 - 자동 반영이 실패하면 GitHub 이 메일로 알린다, 저장소에 60일 동안 커밋이 없으면 GitHub 이 예약 실행을 멈추므로 그런 메일이 오면 Actions 탭에서 다시 켠다
 - 원본 페이지(artifact)의 Working Papers 절은 Claude 안에서 열면 Dropbox 의 두 파일을 읽어 같은 규칙으로 다시 그린다, 처음 열 때 Dropbox 사용을 묻는다, Claude 밖이나 공개 페이지에서는 저장된 정적 목록을 보인다
 - 스크립트 사용법: `--check` 는 고치지 않고 갱신이 필요한 줄만 보여 준다, `--status <경로>` 와 `--entries <경로>` 로 두 파일 위치를 바꾼다(기본 ~/Dropbox/Research/working/), `--html <파일>` 로 원본 페이지 본문 파일도 함께 고친다, `--no-mark` 는 HTML 만 고친다, `--today` 로 날짜를 정한다
-- 순서 규칙: Forthcoming → Revise and resubmit → Submitted(투고일 늦은 것부터) → In progress(투고 준비 → 집필 → 분석 → 설계, 같으면 상태 파일 순서)
+- 순서 규칙: Forthcoming → Revise and resubmit → Under review → Submitted(둘 다 투고일 늦은 것부터) → In progress(투고 준비 → 집필 → 분석 → 설계, 같으면 상태 파일 순서)
+- Under review 판정은 스크립트, 원본 페이지의 Working Papers 스크립트, 상황판의 CV 열이 같은 규칙으로 한다(stage review, events 의 event 나 note 에 "심사 시작" 또는 "under review", 저널명이 target_journal 과 같고 날짜가 submitted_on 이후), 셋 중 하나만 고치면 CV 열에 갱신 필요가 계속 남는다
 - 학술지 이름 앞의 "the" 는 Journal of, Review of, Annals of, Quarterly Journal, International Journal 로 시작할 때만 붙인다
 - 데스크 리젝 뒤 다른 학술지로 옮기면 상태 파일의 target_journal 과 submitted_on 만 고치면 된다, overrides 에 옛 학술지가 남아 있으면 지운다
 
@@ -78,3 +80,4 @@
 - 2026-10-24: Working Papers 절을 논문 상태 기록에서 만드는 tools/build_working_papers.py 추가, 1절·3절·4절·5절을 그에 맞춰 고치고 7절(Research milestone 연계)을 더함, 첫 실행으로 Economics Letters 와 Journal of Urban Economics 투고(2026-10-24)를 Submitted 로, ai words·firm productivity·investment rnd 의 제목을 현재 원고 제목으로, immigrant inflow 를 In progress 로 더함(8편 → 9편)
 - 2026-10-29: 상태 파일이 바뀌어도 CV 가 따라오지 않던 문제를 고침, CV 반영 기록을 _cv_entries.json 으로 떼고 스크립트는 상태 파일을 읽기만 하게 바꿈, 산업단지(JPubE 투고), 빵집 거리 제한(JUE 리젝 뒤 IJIO 투고, 새 제목), 자동화(새 제목)를 반영
 - 2026-10-29(오후): GitHub 자동 반영(10분마다)을 더하고, 원본 페이지 Working Papers 절은 Dropbox 에서 바로 그리게 함, sync_body.py 는 Working Papers 절을 저장소 쪽으로 둠, 1절, 5절, 7절 고침
+- 2026-11-03: 연도 칸에 Under review 를 더함(심사 시작 event 로 판정, 스크립트·원본 페이지·상황판 CV 열에 같이 반영), About 에 연구 흐름 문단(지역·재정 → 이민 → IO 와 측정)을 더함, 3절, 4절, 7절 고침

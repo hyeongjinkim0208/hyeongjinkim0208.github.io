@@ -13,10 +13,11 @@
   - CV 표기 칸(list, title, authors, journal)은 CV 반영 기록 파일의 overrides 에 그 원고가 있으면 그것, 없으면 상태 파일의 cv 칸을 씀
   - list 가 true 인 원고만 올림, 제목은 표기 칸의 title 이 있으면 그것, 없으면 상태 파일의 title
   - 연도 칸은 stage 로 정함: review → Submitted, rr → Revise and resubmit, accepted → Forthcoming, 그 밖은 In progress
+  - review 라도 events 에 그 학술지의 "심사 시작"(또는 under review) 줄이 투고일 이후로 있으면 Under review(데스크를 지나 심사에 들어간 것)
   - published 는 Working Papers 에서 빼고 Journal Articles 로 손으로 옮기라고 알림
-  - 설명 줄: Submitted 는 "Submitted to (the) <em>학술지</em>, 월 연도", Revise and resubmit 와 Forthcoming 은 학술지만
+  - 설명 줄: Submitted 는 "Submitted to (the) <em>학술지</em>, 월 연도", Under review 는 "Under review at (the) <em>학술지</em>, submitted 월 연도", Revise and resubmit 와 Forthcoming 은 학술지만
   - 학술지 이름은 cv.journal 이 있으면 그것, 없으면 target_journal 에서 괄호 이하를 뗀 것
-  - 순서: Forthcoming → Revise and resubmit → Submitted(투고일 늦은 것부터) → In progress(stage 가 투고에 가까운 것부터, 같으면 파일 순서)
+  - 순서: Forthcoming → Revise and resubmit → Under review → Submitted(둘 다 투고일 늦은 것부터) → In progress(stage 가 투고에 가까운 것부터, 같으면 파일 순서)
   - 반영 기록은 CV 반영 기록 파일의 synced 에 원고마다 CV 에 올린 제목, 상태, 학술지, 날짜로 적고 changelog 에 한 줄 더함, 상황판이 이 값과 상태 파일을 비교해 갱신 필요를 표시함
   - 2026-10-29 부터 상태 파일은 읽기만 하고 고치지 않음(여러 세션이 함께 고치는 파일이라), 상태 파일의 cv.synced 는 반영 기록 파일이 없을 때만 비교에 씀
   - CV 반영 기록 파일을 고치기 전에 같은 폴더 _bak/_cv_entries_YYMMDD_v<n>.json 사본을 둠
@@ -31,7 +32,8 @@ import shutil
 import sys
 
 STATUS_BY_STAGE = {"review": "Submitted", "rr": "Revise and resubmit", "accepted": "Forthcoming", "published": "Published"}
-STATUS_RANK = {"Forthcoming": 0, "Revise and resubmit": 1, "Submitted": 2, "In progress": 3}
+STATUS_RANK = {"Forthcoming": 0, "Revise and resubmit": 1, "Under review": 2, "Submitted": 3, "In progress": 4}
+UNDER_REVIEW_WORDS = ("심사 시작", "under review")
 STAGE_RANK = {"ready": 0, "drafting": 1, "analysis": 2, "design": 3, "unknown": 4}
 THE_PREFIXES = ("Journal of", "Review of", "Annals of", "Quarterly Journal", "International Journal")
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -48,6 +50,26 @@ def journal_name(p):
     return re.sub(r"\s*[\(（].*$", "", j).strip()
 
 
+def plain_journal(name):
+    return re.sub(r"\s*[\(（].*$", "", name or "").strip().casefold()
+
+
+def under_review(p, journal):
+    """stage 가 review 이고 events 에 그 학술지의 심사 시작 줄이 투고일 이후로 있으면 True"""
+    if p.get("stage") != "review":
+        return False
+    since = p.get("submitted_on") or ""
+    for ev in p.get("events") or []:
+        text = f"{ev.get('event', '')} {ev.get('note', '')}".casefold()
+        if not any(w in text for w in UNDER_REVIEW_WORDS):
+            continue
+        if plain_journal(ev.get("journal")) != plain_journal(journal):
+            continue
+        if (ev.get("date") or "") >= since:
+            return True
+    return False
+
+
 def month_year(iso):
     try:
         d = dt.date.fromisoformat(iso)
@@ -61,11 +83,15 @@ def entry(p):
     title = (cv.get("title") or p["title"]).strip()
     status = STATUS_BY_STAGE.get(p.get("stage"), "In progress")
     journal = journal_name(p) if status != "In progress" else ""
+    if status == "Submitted" and under_review(p, journal):
+        status = "Under review"
     meta = ""
+    the = "the " if journal.startswith(THE_PREFIXES) else ""
+    when = month_year(p.get("submitted_on", ""))
     if status == "Submitted":
-        the = "the " if journal.startswith(THE_PREFIXES) else ""
-        when = month_year(p.get("submitted_on", ""))
         meta = f"Submitted to {the}<em>{html.escape(journal)}</em>" + (f", {when}" if when else "")
+    elif status == "Under review":
+        meta = f"Under review at {the}<em>{html.escape(journal)}</em>" + (f", submitted {when}" if when else "")
     elif status == "Revise and resubmit":
         meta = f"Revise and resubmit, <em>{html.escape(journal)}</em>"
     elif status == "Forthcoming":
@@ -77,7 +103,7 @@ def entry(p):
 
 def sort_key(e, idx):
     return (STATUS_RANK.get(e["status"], 9),
-            -(int(e["submitted_on"].replace("-", "")) if e["status"] == "Submitted" and e["submitted_on"] else 0),
+            -(int(e["submitted_on"].replace("-", "")) if e["status"] in ("Submitted", "Under review") and e["submitted_on"] else 0),
             STAGE_RANK.get(e["stage"], 9) if e["status"] == "In progress" else 0,
             idx)
 
