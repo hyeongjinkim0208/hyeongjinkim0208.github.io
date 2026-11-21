@@ -40,9 +40,9 @@
   - 수정 요청 → stage rr, 설명은 "Revise and resubmit, *학술지명*"
   - 채택 → stage accepted, 설명은 "*학술지명*, forthcoming"
   - 게재 → stage published, 스크립트가 Working Papers 에서 빼고 알려 주면 Journal Articles 로 손으로 옮기고 권, 호, 쪽수, DOI를 넣는다
-  - 설계 확정(원고 항목 1번)이 done 이 되고 authors 가 정해지면 → Work in Progress 절에 In progress 로 자동으로 오른다, authors 가 비었거나 "미정"으로 시작하면 오르지 않는다
+  - 상태 파일에 원고 줄이 생기면(설계 단계, 저자 미정 포함) → Work in Progress 절에 In progress 로 자동으로 오른다, 저자 줄이 없으면 단독으로 읽히므로 공저가 정해지면 _cv_entries.json 의 overrides 에 그 원고의 authors("with ...")를 적는다
   - 통합본(원고 항목 7번)이 done 이 되면 → Working Papers 절로 옮겨 가고 연도 칸은 Draft
-  - 원고마다 CV 등재 여부를 따로 묻거나 cv.list 를 고칠 필요가 없다(2026-11-21), 일부러 감추려면 _cv_entries.json 의 overrides 에 그 원고의 hide 를 true 로, 설계 확정 전인데 미리 올리려면 list 를 true 로 적는다
+  - 원고마다 CV 등재 여부를 따로 묻거나 cv.list 를 고칠 필요가 없다(2026-11-21), 일부러 감추려면(보류한 원고 등) _cv_entries.json 의 overrides 에 그 원고의 hide 를 true 로 적는다, list 는 쓰지 않는다
 - 항목을 옮기거나 더하면 섹션 제목 옆 개수 표시도 함께 고친다(Working Papers 와 Work in Progress 는 스크립트가 고침)
 
 ## 5. 반영 순서
@@ -62,10 +62,11 @@
 
 ## 7. Research milestone 연계
 
-- 상태 파일의 원고 줄은 title, authors, stage, target_journal, submitted_on, milestones, events 와 `cv` 칸(hide, list, title, authors, journal)을 가진다, 원고 폴더 세션이 고치는 값이다
-- 등재 판정(2026-11-21): 먼저 hide 가 true 면 올리지 않는다, stage 가 review, rr, accepted 이거나 통합본이 done 이거나 events 에 투고 줄이 있으면 Working Papers(한 번 투고한 원고는 재구성으로 통합본이 partial 로 돌아가도 내리지 않는다), 그 밖에 list 가 true 이거나 설계 확정이 done 이고 authors 가 정해졌으면 Work in Progress, 나머지는 올리지 않는다, cv.list 의 false 는 뜻이 없다(줄을 처음 만들 때의 기본값일 뿐)
+- 상태 파일의 원고 줄은 title, authors, stage, target_journal, submitted_on, milestones, events 와 `cv` 칸(hide, title, authors, journal)을 가진다, 원고 폴더 세션이 고치는 값이다
+- 등재 판정(2026-11-21): 먼저 hide 가 true 면 올리지 않는다, stage 가 review, rr, accepted 이거나 통합본이 done 이거나 events 에 투고 줄이 있으면 Working Papers(한 번 투고한 원고는 재구성으로 통합본이 partial 로 돌아가도 내리지 않는다), 그 밖의 원고는 모두 Work in Progress(설계 단계와 저자 미정 포함, 같은 날 오전 HJ 결정으로 설계 확정과 저자 조건을 없앰), cv.list 는 true 든 false 든 쓰지 않는다
+- 등재 규칙의 글은 이 문서 4절과 7절에만 둔다, _cv_entries.json 의 _readme 에는 옮겨 적지 않고 이 문서를 가리키게 한다(규칙이 바뀔 때 고칠 곳을 줄임)
 - Work in Progress 에 올릴 원고가 없으면 스크립트가 그 절과 목차 줄에 hidden 을 붙여 감춘다, 목차 번호는 CSS 카운터라 감춘 줄을 건너뛴다
-- `_cv_entries.json` 은 CV 쪽 기록이다: `overrides`(원고별 CV 표기와 hide, list, 있으면 상태 파일의 cv 칸 대신 씀), `synced`(CV 에 올린 제목, 상태, 학술지, 날짜, 스크립트가 적음), `changelog`
+- `_cv_entries.json` 은 CV 쪽 기록이다: `overrides`(원고별 CV 표기와 hide, 있으면 상태 파일의 cv 칸 대신 씀), `synced`(CV 에 올린 제목, 상태, 학술지, 날짜, 스크립트가 적음), `changelog`
 - 상태 파일의 cv.synced 는 2026-10-24 판의 흔적이다, _cv_entries.json 이 있으면 쓰지 않는다
 - 상황판(Research milestone)은 상태 파일과 overrides 로 CV 에 나올 값을 계산해 synced 와 비교하고, 다르면 논문별 현황 표의 CV 열에 "갱신 필요"를 보인다, 자동 반영이 돌면 10–20분 안에 사라지고, 한 시간 넘게 남아 있으면 자동 반영이 멈춘 것이다
 - GitHub 자동 반영: `.github/workflows/sync-working-papers.yml` 이 10분마다 `tools/dropbox_sync.py` 를 돌린다, Dropbox API 로 두 파일을 받아 스크립트를 돌리고, index.html 이 바뀌면 커밋해 push 하고, synced 가 바뀌면 Dropbox 의 옛 판을 `_bak/_cv_entries_YYMMDD_v<n>.json` 으로 복사한 뒤 덮어쓴다(받은 뒤 누가 고쳤으면 덮어쓰지 않고 다음 회차에 다시 함)
@@ -86,3 +87,4 @@
 - 2026-10-29(오후): GitHub 자동 반영(10분마다)을 더하고, 원본 페이지 Working Papers 절은 Dropbox 에서 바로 그리게 함, sync_body.py 는 Working Papers 절을 저장소 쪽으로 둠, 1절, 5절, 7절 고침
 - 2026-11-03: 연도 칸에 Under review 를 더함(심사 시작 event 로 판정, 스크립트·원본 페이지·상황판 CV 열에 같이 반영), About 에 연구 흐름 문단(지역·재정 → 이민 → IO 와 측정)을 더함, 3절, 4절, 7절 고침
 - 2026-11-21: CV 등재를 자동 판정으로 바꾸고 Work in Progress 절을 더함(HJ 결정: 설계 확정과 저자 결정이면 Work in Progress, 통합본이면 Working Papers, 투고 전 초고의 연도 칸은 Draft), cv.list 는 미리 올리는 스위치로만 남기고 hide 를 더함, 목차 번호를 CSS 카운터로 바꿈, 스크립트·실시간 스크립트·상황판 CV 열·sync_body.py 에 같이 반영, 1절, 3절, 4절, 5절, 7절 고침, 첫 실행으로 auto·firm productivity·investment rnd 는 Draft, manuprotection 은 Work in Progress 로 옮기고 factory thresholds 를 Work in Progress 에 더함
+- 2026-11-21(오전, 두 번째): 설계 단계와 저자 미정 원고도 Work in Progress 에 올리기로 함(HJ 결정), 설계 확정과 저자 조건, list 스위치를 없애고 hide 만 남김, 절 머리 안내를 design 포함으로 고침, fireworks 와 reallocation 을 Work in Progress 에 더함(2편 → 4편), firm productivity 의 새 제목 반영, 4절, 7절 고침

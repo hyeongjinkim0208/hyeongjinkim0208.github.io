@@ -12,11 +12,10 @@
 규칙(CV_갱신절차.md 4절, 7절)
   - 올릴지와 어느 절에 올릴지는 상태 파일의 stage, 원고 항목(milestones), events, authors 로 자동 판정함(2026-11-21)
     - Working Papers: stage 가 review, rr, accepted 이거나, 통합본이 done 이거나, events 에 투고 줄이 있는 원고(한 번 투고한 원고는 재구성 중이어도 내리지 않음)
-    - Work in Progress: 위에 들지 않고, 설계 확정이 done 이며 authors 가 정해진(비어 있지 않고 "미정"으로 시작하지 않는) 원고
-    - 그 밖(설계 전, 저자 미정)은 올리지 않음
+    - Work in Progress: 위에 들지 않는 모든 원고(설계 단계와 저자 미정 포함, HJ 결정 2026-11-21 오전), 상태 파일에 줄이 있으면 오름
   - CV 표기 칸(hide, list, title, authors, journal)은 CV 반영 기록 파일의 overrides 에 그 원고가 있으면 그것, 없으면 상태 파일의 cv 칸을 씀
     - hide 가 true 면 판정과 상관없이 올리지 않음(끄기 스위치)
-    - list 가 true 면 설계 확정 전이거나 저자 미정이어도 Work in Progress 에 올림(HJ 가 미리 올리기로 한 원고), false 는 뜻이 없고 판정을 따름
+    - list 는 이제 쓰지 않음(true 든 false 든 판정을 따름)
     - 제목은 표기 칸의 title 이 있으면 그것, 없으면 상태 파일의 title
   - 연도 칸: review → Submitted, rr → Revise and resubmit, accepted → Forthcoming, Working Papers 의 그 밖(투고 전 초고)은 Draft, Work in Progress 는 In progress
   - review 라도 events 에 그 학술지의 "심사 시작"(또는 under review) 줄이 투고일 이후로 있으면 Under review(데스크를 지나 심사에 들어간 것)
@@ -50,7 +49,7 @@ SECTION_RE = re.compile(r'(<section class="section" id="working-papers">\n)(.*?)
 WIP_RE = re.compile(r'<section class="section" id="work-in-progress"(?: hidden)?>\n.*?\n      </section>', re.S)
 NAV_WP_RE = re.compile(r'\n([ \t]*)<a href="#working-papers">.*?</a>')
 NAV_WIP_RE = re.compile(r'<a href="#work-in-progress"(?: hidden)?>')
-WIP_NOTE = "Projects in analysis or drafting. Titles are tentative."
+WIP_NOTE = "Projects in design, analysis, or drafting. Titles are tentative."
 UPDATED_RE = re.compile(r'<p class="updated">Last updated [A-Z][a-z]+ \d{4}</p>')
 
 
@@ -95,17 +94,12 @@ def milestone(p, item):
     return None
 
 
-def authors_set(p):
-    a = (p.get("authors") or "").strip()
-    return bool(a) and not a.startswith("미정")
-
-
 def ever_submitted(p):
     return any("투고" in (ev.get("event") or "") for ev in p.get("events") or [])
 
 
 def placement(p):
-    """올릴 절("wp" Working Papers, "wip" Work in Progress, None 올리지 않음)과 연도 칸의 상태"""
+    """올릴 절("wp" Working Papers, "wip" 그 밖의 모든 원고가 가는 Work in Progress, None 은 hide 로 감춘 원고)과 연도 칸의 상태"""
     cv = p.get("_cv") or {}
     if cv.get("hide"):
         return None, ""
@@ -114,9 +108,7 @@ def placement(p):
         return "wp", status
     if milestone(p, "통합본") == "done" or ever_submitted(p):
         return "wp", "Draft"
-    if cv.get("list") or (milestone(p, "설계 확정") == "done" and authors_set(p)):
-        return "wip", "In progress"
-    return None, ""
+    return "wip", "In progress"
 
 
 def month_year(iso):

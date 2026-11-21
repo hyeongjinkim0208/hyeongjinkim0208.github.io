@@ -533,14 +533,8 @@
           <div class="row">
             <div class="y">Draft</div>
             <div class="b">
-              <p class="t">Low-skilled Immigrant Hiring Does Not Lower Firm Productivity: Evidence from Korean Manufacturing SMEs</p>
+              <p class="t">Do Temporary Migrant Workers Raise Productivity or Relieve Labour Shortages? Evidence from Korea’s Employment Permit System</p>
               <p class="auth">with J. Y. So, C. Choe, and H. Song</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="y">Draft</div>
-            <div class="b">
-              <p class="t">Foreign Employment and Automation in Small Firms: Evidence from Korea's Employment Permit System</p>
             </div>
           </div>
           <div class="row">
@@ -549,12 +543,18 @@
               <p class="t">When Guest Workers Stopped Coming: Firm Investment and R&amp;D in Korea</p>
             </div>
           </div>
+          <div class="row">
+            <div class="y">Draft</div>
+            <div class="b">
+              <p class="t">Foreign Employment and Automation in Small Firms: Evidence from Korea's Employment Permit System</p>
+            </div>
+          </div>
         </div>
       </section>
 
       <section class="section" id="work-in-progress">
-        <h2>Work in Progress <span class="count">2</span></h2>
-        <p class="note">Projects in analysis or drafting. Titles are tentative.</p>
+        <h2>Work in Progress <span class="count">4</span></h2>
+        <p class="note">Projects in design, analysis, or drafting. Titles are tentative.</p>
         <div class="ledger">
           <div class="row">
             <div class="y">In progress</div>
@@ -566,6 +566,18 @@
             <div class="y">In progress</div>
             <div class="b">
               <p class="t">Does Ending Small-Firm Protection Matter? Evidence from the Korean Factory Register</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Are the Fireworks Too Loud? Same Holiday, Different Customs, and Native Complaints about Immigrants</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Relocation Incentives and the Spatial Allocation of Production</p>
             </div>
           </div>
         </div>
@@ -963,15 +975,13 @@
       var hit = (Array.isArray(ms) ? ms : []).filter(function (m) { return m && m.item === item; })[0];
       return hit ? hit.state : '';
     }
-    // 올릴 절(wp 는 Working Papers, wip 는 Work in Progress, null 은 올리지 않음)과 연도 칸의 상태
+    // 올릴 절(wp 는 Working Papers, wip 는 그 밖의 모든 원고가 가는 Work in Progress, null 은 hide 로 감춘 원고)과 연도 칸의 상태
     function place(p, cv) {
       if (cv.hide) return null;
       if (BY_STAGE[p.stage]) return { sec: 'wp', status: BY_STAGE[p.stage] };
       var sent = (Array.isArray(p.events) ? p.events : []).some(function (ev) { return String(ev.event || '').indexOf('투고') >= 0; });
       if (itemState(p, '통합본') === 'done' || sent) return { sec: 'wp', status: 'Draft' };
-      var who = String(p.authors || '').trim();
-      if (cv.list || (itemState(p, '설계 확정') === 'done' && who && who.indexOf('미정') !== 0)) return { sec: 'wip', status: 'In progress' };
-      return null;
+      return { sec: 'wip', status: 'In progress' };
     }
     function monthYear(iso) {
       var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
