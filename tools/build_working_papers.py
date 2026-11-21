@@ -1,4 +1,4 @@
-"""논문 상태 기록(_paper_status.json)에서 CV 의 Working Papers 절을 만들어 HTML 에 넣는다.
+"""논문 상태 기록(_paper_status.json)에서 CV 의 Working Papers 절과 Work in Progress 절을 만들어 HTML 에 넣는다.
 
 사용법
   python3 tools/build_working_papers.py                      # index.html 을 고치고 CV 반영 기록 파일에 반영 기록을 씀
@@ -10,14 +10,21 @@
   python3 tools/build_working_papers.py --backup-name <이름>  # 사본을 로컬에 만들지 않고 changelog 에 이 이름만 적음(GitHub 자동 반영용, 사본은 tools/dropbox_sync.py 가 Dropbox 에 만듦)
 
 규칙(CV_갱신절차.md 4절, 7절)
-  - CV 표기 칸(list, title, authors, journal)은 CV 반영 기록 파일의 overrides 에 그 원고가 있으면 그것, 없으면 상태 파일의 cv 칸을 씀
-  - list 가 true 인 원고만 올림, 제목은 표기 칸의 title 이 있으면 그것, 없으면 상태 파일의 title
-  - 연도 칸은 stage 로 정함: review → Submitted, rr → Revise and resubmit, accepted → Forthcoming, 그 밖은 In progress
+  - 올릴지와 어느 절에 올릴지는 상태 파일의 stage, 원고 항목(milestones), events, authors 로 자동 판정함(2026-11-21)
+    - Working Papers: stage 가 review, rr, accepted 이거나, 통합본이 done 이거나, events 에 투고 줄이 있는 원고(한 번 투고한 원고는 재구성 중이어도 내리지 않음)
+    - Work in Progress: 위에 들지 않고, 설계 확정이 done 이며 authors 가 정해진(비어 있지 않고 "미정"으로 시작하지 않는) 원고
+    - 그 밖(설계 전, 저자 미정)은 올리지 않음
+  - CV 표기 칸(hide, list, title, authors, journal)은 CV 반영 기록 파일의 overrides 에 그 원고가 있으면 그것, 없으면 상태 파일의 cv 칸을 씀
+    - hide 가 true 면 판정과 상관없이 올리지 않음(끄기 스위치)
+    - list 가 true 면 설계 확정 전이거나 저자 미정이어도 Work in Progress 에 올림(HJ 가 미리 올리기로 한 원고), false 는 뜻이 없고 판정을 따름
+    - 제목은 표기 칸의 title 이 있으면 그것, 없으면 상태 파일의 title
+  - 연도 칸: review → Submitted, rr → Revise and resubmit, accepted → Forthcoming, Working Papers 의 그 밖(투고 전 초고)은 Draft, Work in Progress 는 In progress
   - review 라도 events 에 그 학술지의 "심사 시작"(또는 under review) 줄이 투고일 이후로 있으면 Under review(데스크를 지나 심사에 들어간 것)
   - published 는 Working Papers 에서 빼고 Journal Articles 로 손으로 옮기라고 알림
   - 설명 줄: Submitted 는 "Submitted to (the) <em>학술지</em>, 월 연도", Under review 는 "Under review at (the) <em>학술지</em>, submitted 월 연도", Revise and resubmit 와 Forthcoming 은 학술지만
   - 학술지 이름은 cv.journal 이 있으면 그것, 없으면 target_journal 에서 괄호 이하를 뗀 것
-  - 순서: Forthcoming → Revise and resubmit → Under review → Submitted(둘 다 투고일 늦은 것부터) → In progress(stage 가 투고에 가까운 것부터, 같으면 파일 순서)
+  - Working Papers 순서: Forthcoming → Revise and resubmit → Under review → Submitted(둘 다 투고일 늦은 것부터) → Draft(stage 가 투고에 가까운 것부터, 같으면 파일 순서)
+  - Work in Progress 순서: stage 가 투고에 가까운 것부터, 같으면 파일 순서, 올릴 원고가 없으면 절과 목차 줄에 hidden 을 붙여 감춤
   - 반영 기록은 CV 반영 기록 파일의 synced 에 원고마다 CV 에 올린 제목, 상태, 학술지, 날짜로 적고 changelog 에 한 줄 더함, 상황판이 이 값과 상태 파일을 비교해 갱신 필요를 표시함
   - 2026-10-29 부터 상태 파일은 읽기만 하고 고치지 않음(여러 세션이 함께 고치는 파일이라), 상태 파일의 cv.synced 는 반영 기록 파일이 없을 때만 비교에 씀
   - CV 반영 기록 파일을 고치기 전에 같은 폴더 _bak/_cv_entries_YYMMDD_v<n>.json 사본을 둠
@@ -32,13 +39,18 @@ import shutil
 import sys
 
 STATUS_BY_STAGE = {"review": "Submitted", "rr": "Revise and resubmit", "accepted": "Forthcoming", "published": "Published"}
-STATUS_RANK = {"Forthcoming": 0, "Revise and resubmit": 1, "Under review": 2, "Submitted": 3, "In progress": 4}
+STATUS_RANK = {"Forthcoming": 0, "Revise and resubmit": 1, "Under review": 2, "Submitted": 3, "Draft": 4, "In progress": 5}
+WITH_JOURNAL = ("Submitted", "Under review", "Revise and resubmit", "Forthcoming", "Published")
 UNDER_REVIEW_WORDS = ("심사 시작", "under review")
 STAGE_RANK = {"ready": 0, "drafting": 1, "analysis": 2, "design": 3, "unknown": 4}
 THE_PREFIXES = ("Journal of", "Review of", "Annals of", "Quarterly Journal", "International Journal")
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 SECTION_RE = re.compile(r'(<section class="section" id="working-papers">\n)(.*?)(\n      </section>)', re.S)
+WIP_RE = re.compile(r'<section class="section" id="work-in-progress"(?: hidden)?>\n.*?\n      </section>', re.S)
+NAV_WP_RE = re.compile(r'\n([ \t]*)<a href="#working-papers">.*?</a>')
+NAV_WIP_RE = re.compile(r'<a href="#work-in-progress"(?: hidden)?>')
+WIP_NOTE = "Projects in analysis or drafting. Titles are tentative."
 UPDATED_RE = re.compile(r'<p class="updated">Last updated [A-Z][a-z]+ \d{4}</p>')
 
 
@@ -70,6 +82,43 @@ def under_review(p, journal):
     return False
 
 
+def milestone(p, item):
+    ms = p.get("milestones") or []
+    if isinstance(ms, str):
+        try:
+            ms = json.loads(ms)
+        except Exception:
+            ms = []
+    for m in ms:
+        if m.get("item") == item:
+            return m.get("state")
+    return None
+
+
+def authors_set(p):
+    a = (p.get("authors") or "").strip()
+    return bool(a) and not a.startswith("미정")
+
+
+def ever_submitted(p):
+    return any("투고" in (ev.get("event") or "") for ev in p.get("events") or [])
+
+
+def placement(p):
+    """올릴 절("wp" Working Papers, "wip" Work in Progress, None 올리지 않음)과 연도 칸의 상태"""
+    cv = p.get("_cv") or {}
+    if cv.get("hide"):
+        return None, ""
+    status = STATUS_BY_STAGE.get(p.get("stage"))
+    if status:
+        return "wp", status
+    if milestone(p, "통합본") == "done" or ever_submitted(p):
+        return "wp", "Draft"
+    if cv.get("list") or (milestone(p, "설계 확정") == "done" and authors_set(p)):
+        return "wip", "In progress"
+    return None, ""
+
+
 def month_year(iso):
     try:
         d = dt.date.fromisoformat(iso)
@@ -81,8 +130,8 @@ def month_year(iso):
 def entry(p):
     cv = p.get("_cv") or {}
     title = (cv.get("title") or p["title"]).strip()
-    status = STATUS_BY_STAGE.get(p.get("stage"), "In progress")
-    journal = journal_name(p) if status != "In progress" else ""
+    section, status = placement(p)
+    journal = journal_name(p) if status in WITH_JOURNAL else ""
     if status == "Submitted" and under_review(p, journal):
         status = "Under review"
     meta = ""
@@ -96,7 +145,7 @@ def entry(p):
         meta = f"Revise and resubmit, <em>{html.escape(journal)}</em>"
     elif status == "Forthcoming":
         meta = f"<em>{html.escape(journal)}</em>, forthcoming"
-    return {"paper_id": p["paper_id"], "title": title, "status": status, "journal": journal, "meta": meta,
+    return {"paper_id": p["paper_id"], "section": section, "title": title, "status": status, "journal": journal, "meta": meta,
             "authors": (cv.get("authors") or "").strip(), "submitted_on": p.get("submitted_on") or "",
             "stage": p.get("stage", "unknown")}
 
@@ -104,11 +153,11 @@ def entry(p):
 def sort_key(e, idx):
     return (STATUS_RANK.get(e["status"], 9),
             -(int(e["submitted_on"].replace("-", "")) if e["status"] in ("Submitted", "Under review") and e["submitted_on"] else 0),
-            STAGE_RANK.get(e["stage"], 9) if e["status"] == "In progress" else 0,
+            STAGE_RANK.get(e["stage"], 9) if e["status"] in ("Draft", "In progress") else 0,
             idx)
 
 
-def render(entries):
+def render_rows(entries):
     rows = []
     for e in entries:
         b = [f'              <p class="t">{html.escape(e["title"], quote=False)}</p>']
@@ -121,17 +170,46 @@ def render(entries):
                     '            <div class="b">\n' + "\n".join(b) + '\n'
                     '            </div>\n'
                     '          </div>')
+    return "".join(r + "\n" for r in rows)
+
+
+def render(entries):
+    """Working Papers 절의 안쪽(h2 와 목록)"""
     return (f'        <h2>Working Papers <span class="count">{len(entries)}</span></h2>\n'
-            '        <div class="ledger">\n' + "\n".join(rows) + '\n'
+            '        <div class="ledger">\n' + render_rows(entries) +
             '        </div>')
 
 
-def apply_html(path, section, today):
+def render_wip(entries):
+    """Work in Progress 절 전체, 올릴 원고가 없으면 hidden"""
+    hidden = "" if entries else " hidden"
+    return (f'<section class="section" id="work-in-progress"{hidden}>\n'
+            f'        <h2>Work in Progress <span class="count">{len(entries)}</span></h2>\n'
+            f'        <p class="note">{WIP_NOTE}</p>\n'
+            '        <div class="ledger">\n' + render_rows(entries) +
+            '        </div>\n'
+            '      </section>')
+
+
+def apply_html(path, section, wip_section, wip_shown, today):
     text = path.read_text(encoding="utf-8")
     m = SECTION_RE.search(text)
     if not m:
         sys.exit(f"{path}: working-papers 절을 찾지 못함")
     new = text[:m.start(2)] + section + text[m.end(2):]
+    w = WIP_RE.search(new)
+    if w:
+        new = new[:w.start()] + wip_section + new[w.end():]
+    else:  # 절이 아직 없는 옛 본문: Working Papers 절 바로 뒤에 넣음
+        m = SECTION_RE.search(new)
+        new = new[:m.end()] + "\n\n      " + wip_section + new[m.end():]
+    nav = f'<a href="#work-in-progress"{"" if wip_shown else " hidden"}>'
+    if NAV_WIP_RE.search(new):
+        new = NAV_WIP_RE.sub(nav, new, count=1)
+    else:  # 목차 줄이 아직 없는 옛 본문: Working Papers 줄 바로 뒤에 넣음
+        n = NAV_WP_RE.search(new)
+        if n:
+            new = new[:n.end()] + f'\n{n.group(1)}{nav}<span class="n"></span>Work in Progress</a>' + new[n.end():]
     if new != text:
         new = UPDATED_RE.sub(f'<p class="updated">Last updated {MONTHS[today.month - 1]} {today.year}</p>', new, count=1)
         path.write_text(new, encoding="utf-8")
@@ -178,27 +256,35 @@ def main():
 
     for p in doc["papers"]:
         p["_cv"] = overrides.get(p["paper_id"], p.get("cv") or {})
-    listed = [(i, p) for i, p in enumerate(doc["papers"]) if p["_cv"].get("list")]
-    entries = []
-    for i, p in listed:
+    entries, unlisted = [], []
+    for i, p in enumerate(doc["papers"]):
         e = entry(p)
+        if not e["section"]:
+            unlisted.append(e)
+            continue
         e["_idx"] = i
         e["_needs"] = needs_update(p, e, synced)
         entries.append(e)
     published = [e for e in entries if e["status"] == "Published"]
-    shown = sorted([e for e in entries if e["status"] != "Published"], key=lambda e: sort_key(e, e["_idx"]))
+    live = [e for e in entries if e["status"] != "Published"]
+    shown = sorted([e for e in live if e["section"] == "wp"], key=lambda e: sort_key(e, e["_idx"]))
+    shown_wip = sorted([e for e in live if e["section"] == "wip"], key=lambda e: sort_key(e, e["_idx"]))
 
     for e in entries:
         flag = "갱신 필요" if e["_needs"] else "반영됨"
-        print(f"{flag:5s}  {e['paper_id']:9s}  {e['status']:20s}  {e['title']}")
+        where = {"wp": "Working Papers", "wip": "Work in Progress"}[e["section"]]
+        print(f"{flag:5s}  {e['paper_id']:15s}  {where:16s}  {e['status']:20s}  {e['title']}")
+    for e in unlisted:
+        print(f"목록 외  {e['paper_id']:15s}  {'':16s}  {'':20s}  {e['title']}")
     for e in published:
         print(f"알림  {e['paper_id']}: stage 가 published 라 Working Papers 에서 뺌, Journal Articles 에 권·호·쪽·DOI 와 함께 손으로 옮길 것(CV_갱신절차 4절)")
     if args.check:
         return
 
     section = render(shown)
+    wip_section = render_wip(shown_wip)
     html_paths = [pathlib.Path(h) for h in args.html] if args.html else [pathlib.Path(__file__).resolve().parent.parent / "index.html"]
-    changed = [str(h) for h in html_paths if apply_html(h, section, today)]
+    changed = [str(h) for h in html_paths if apply_html(h, section, wip_section, bool(shown_wip), today)]
     print("HTML 고침: " + (", ".join(changed) if changed else "변경 없음"))
 
     if args.no_mark:

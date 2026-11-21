@@ -6,14 +6,16 @@
 Artifact read 로 받은 파일처럼 앞뒤에 플랫폼이 붙인 <html><head>...<body> 와
 </body></html> 가 있어도 자동으로 떼어 낸다.
 
-Working Papers 절은 GitHub 자동 반영(tools/dropbox_sync.py)이 저장소에서 만드는 절이라
-원본 페이지 쪽이 아니라 index.html 에 있던 것을 그대로 둔다, "Last updated" 는 둘 중 늦은 달을 쓴다.
+Working Papers 절과 Work in Progress 절(목차 줄의 hidden 포함)은 GitHub 자동 반영(tools/dropbox_sync.py)이
+저장소에서 만드는 절이라 원본 페이지 쪽이 아니라 index.html 에 있던 것을 그대로 둔다, "Last updated" 는 둘 중 늦은 달을 쓴다.
 """
 import pathlib
 import re
 import sys
 
 SECTION_RE = re.compile(r'(<section class="section" id="working-papers">\n)(.*?)(\n      </section>)', re.S)
+WIP_RE = re.compile(r'<section class="section" id="work-in-progress"(?: hidden)?>\n.*?\n      </section>', re.S)
+NAV_WIP_RE = re.compile(r'<a href="#work-in-progress"(?: hidden)?>')
 UPDATED_RE = re.compile(r'<p class="updated">Last updated ([A-Z][a-z]+) (\d{4})</p>')
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -22,6 +24,10 @@ def keep_repo_parts(new: str, old: str) -> str:
     mo, mn = SECTION_RE.search(old), SECTION_RE.search(new)
     if mo and mn:
         new = new[:mn.start(2)] + mo.group(2) + new[mn.end(2):]
+    for rx in (WIP_RE, NAV_WIP_RE):
+        ro, rn = rx.search(old), rx.search(new)
+        if ro and rn:
+            new = new[:rn.start()] + ro.group(0) + new[rn.end():]
     uo, un = UPDATED_RE.search(old), UPDATED_RE.search(new)
     if uo and un:
         key = lambda m: (int(m.group(2)), MONTHS.index(m.group(1)) if m.group(1) in MONTHS else -1)

@@ -169,7 +169,10 @@
     border-left: 2px solid transparent;
     text-decoration: none;
   }
+  .nav { counter-reset: nav; }
+  .nav a { counter-increment: nav; }
   .nav a .n { font-family: var(--mono); font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .nav a .n::before { content: counter(nav, decimal-leading-zero); }
   .nav a:hover { color: var(--ink); }
   .nav a.active { color: var(--ink); border-left-color: var(--accent); }
   .updated { font-size: 13px; color: var(--faint); }
@@ -322,15 +325,16 @@
       <nav aria-label="Sections">
         <p class="kicker">Contents</p>
         <div class="nav" id="nav">
-          <a href="#about"><span class="n">01</span>About</a>
-          <a href="#appointments"><span class="n">02</span>Appointments</a>
-          <a href="#education"><span class="n">03</span>Education</a>
-          <a href="#publications"><span class="n">04</span>Journal Articles</a>
-          <a href="#working-papers"><span class="n">05</span>Working Papers</a>
-          <a href="#reports"><span class="n">06</span>Policy Reports</a>
-          <a href="#books"><span class="n">07</span>Books</a>
-          <a href="#honors"><span class="n">08</span>Honors &amp; Grants</a>
-          <a href="#projects"><span class="n">09</span>Research Projects</a>
+          <a href="#about"><span class="n"></span>About</a>
+          <a href="#appointments"><span class="n"></span>Appointments</a>
+          <a href="#education"><span class="n"></span>Education</a>
+          <a href="#publications"><span class="n"></span>Journal Articles</a>
+          <a href="#working-papers"><span class="n"></span>Working Papers</a>
+          <a href="#work-in-progress"><span class="n"></span>Work in Progress</a>
+          <a href="#reports"><span class="n"></span>Policy Reports</a>
+          <a href="#books"><span class="n"></span>Books</a>
+          <a href="#honors"><span class="n"></span>Honors &amp; Grants</a>
+          <a href="#projects"><span class="n"></span>Research Projects</a>
         </div>
       </nav>
 
@@ -482,7 +486,7 @@
       </section>
 
       <section class="section" id="working-papers">
-        <h2>Working Papers <span class="count">10</span></h2>
+        <h2>Working Papers <span class="count">9</span></h2>
         <div class="ledger">
           <div class="row">
             <div class="y">Under review</div>
@@ -527,22 +531,35 @@
             </div>
           </div>
           <div class="row">
-            <div class="y">In progress</div>
+            <div class="y">Draft</div>
             <div class="b">
               <p class="t">Low-skilled Immigrant Hiring Does Not Lower Firm Productivity: Evidence from Korean Manufacturing SMEs</p>
               <p class="auth">with J. Y. So, C. Choe, and H. Song</p>
             </div>
           </div>
           <div class="row">
-            <div class="y">In progress</div>
+            <div class="y">Draft</div>
             <div class="b">
               <p class="t">Foreign Employment and Automation in Small Firms: Evidence from Korea's Employment Permit System</p>
             </div>
           </div>
           <div class="row">
-            <div class="y">In progress</div>
+            <div class="y">Draft</div>
             <div class="b">
               <p class="t">When Guest Workers Stopped Coming: Firm Investment and R&amp;D in Korea</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="work-in-progress">
+        <h2>Work in Progress <span class="count">2</span></h2>
+        <p class="note">Projects in analysis or drafting. Titles are tentative.</p>
+        <div class="ledger">
+          <div class="row">
+            <div class="y">In progress</div>
+            <div class="b">
+              <p class="t">Do Factory Buildings Bunch below Coverage Caps? Evidence from Korea</p>
             </div>
           </div>
           <div class="row">
@@ -907,14 +924,14 @@
 </script>
 
 <script>
-  // Working Papers: Claude 안에서 이 페이지를 열면 Dropbox 의 논문 상태 기록(_paper_status.json)과
+  // Working Papers 와 Work in Progress: Claude 안에서 이 페이지를 열면 Dropbox 의 논문 상태 기록(_paper_status.json)과
   // CV 반영 기록(_cv_entries.json)으로 바로 다시 그림, 그 밖(GitHub Pages 등)에서는 위의 정적 목록 그대로
   // 규칙은 tools/build_working_papers.py 와 같음(CV_갱신절차.md 7절)
   (function () {
     if (!window.claude || typeof window.claude.use !== 'function') return;
     var FILES = { status: '/Research/working/_paper_status.json', entries: '/Research/working/_cv_entries.json' };
     var BY_STAGE = { review: 'Submitted', rr: 'Revise and resubmit', accepted: 'Forthcoming', published: 'Published' };
-    var S_RANK = { 'Forthcoming': 0, 'Revise and resubmit': 1, 'Under review': 2, 'Submitted': 3, 'In progress': 4 };
+    var S_RANK = { 'Forthcoming': 0, 'Revise and resubmit': 1, 'Under review': 2, 'Submitted': 3, 'Draft': 4, 'In progress': 5 };
     var UR_WORDS = ['심사 시작', 'under review'];
     var G_RANK = { ready: 0, drafting: 1, analysis: 2, design: 3, unknown: 4 };
     var THE = ['Journal of', 'Review of', 'Annals of', 'Quarterly Journal', 'International Journal'];
@@ -940,6 +957,22 @@
           && String(ev.date || '') >= since;
       });
     }
+    function itemState(p, item) {
+      var ms = p.milestones;
+      if (typeof ms === 'string') { try { ms = JSON.parse(ms); } catch (e) { ms = []; } }
+      var hit = (Array.isArray(ms) ? ms : []).filter(function (m) { return m && m.item === item; })[0];
+      return hit ? hit.state : '';
+    }
+    // 올릴 절(wp 는 Working Papers, wip 는 Work in Progress, null 은 올리지 않음)과 연도 칸의 상태
+    function place(p, cv) {
+      if (cv.hide) return null;
+      if (BY_STAGE[p.stage]) return { sec: 'wp', status: BY_STAGE[p.stage] };
+      var sent = (Array.isArray(p.events) ? p.events : []).some(function (ev) { return String(ev.event || '').indexOf('투고') >= 0; });
+      if (itemState(p, '통합본') === 'done' || sent) return { sec: 'wp', status: 'Draft' };
+      var who = String(p.authors || '').trim();
+      if (cv.list || (itemState(p, '설계 확정') === 'done' && who && who.indexOf('미정') !== 0)) return { sec: 'wip', status: 'In progress' };
+      return null;
+    }
     function monthYear(iso) {
       var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
       return m ? MONTHS[Number(m[2]) - 1] + ' ' + m[1] : '';
@@ -960,22 +993,22 @@
       var rows = [];
       doc.papers.forEach(function (p, i) {
         var cv = ov[p.paper_id] || p.cv || {};
-        if (!cv.list) return;
-        var status = BY_STAGE[p.stage] || 'In progress';
-        if (status === 'Published') return;
-        var journal = status === 'In progress' ? '' : (cv.journal || String(p.target_journal || '').replace(/\s*[\(（].*$/, '').trim());
+        var at = place(p, cv);
+        if (!at || at.status === 'Published') return;
+        var status = at.status;
+        var journal = (status === 'Draft' || status === 'In progress') ? '' : (cv.journal || String(p.target_journal || '').replace(/\s*[\(（].*$/, '').trim());
         if (status === 'Submitted' && underReview(p, journal)) status = 'Under review';
-        rows.push({ i: i, status: status, journal: journal, title: String(cv.title || p.title || '').trim(),
+        rows.push({ i: i, sec: at.sec, status: status, journal: journal, title: String(cv.title || p.title || '').trim(),
           authors: String(cv.authors || '').trim(), sub: String(p.submitted_on || ''), stage: p.stage || 'unknown' });
       });
       rows.sort(function (a, b) {
         var da = (a.status === 'Submitted' || a.status === 'Under review') && a.sub ? Number(a.sub.replace(/-/g, '')) : 0;
         var db = (b.status === 'Submitted' || b.status === 'Under review') && b.sub ? Number(b.sub.replace(/-/g, '')) : 0;
-        var ga = a.status === 'In progress' ? (G_RANK[a.stage] !== undefined ? G_RANK[a.stage] : 9) : 0;
-        var gb = b.status === 'In progress' ? (G_RANK[b.stage] !== undefined ? G_RANK[b.stage] : 9) : 0;
+        var ga = (a.status === 'Draft' || a.status === 'In progress') ? (G_RANK[a.stage] !== undefined ? G_RANK[a.stage] : 9) : 0;
+        var gb = (b.status === 'Draft' || b.status === 'In progress') ? (G_RANK[b.stage] !== undefined ? G_RANK[b.stage] : 9) : 0;
         return (S_RANK[a.status] - S_RANK[b.status]) || (db - da) || (ga - gb) || (a.i - b.i);
       });
-      ledger.replaceChildren.apply(ledger, rows.map(function (r) {
+      function rowEl(r) {
         var row = el('div', 'row');
         var b = el('div', 'b');
         row.append(el('div', 'y', r.status), b);
@@ -1001,9 +1034,21 @@
           b.append(m);
         }
         return row;
-      }));
-      var count = sec.querySelector('h2 .count');
-      if (count) count.textContent = String(rows.length);
+      }
+      [['working-papers', 'wp'], ['work-in-progress', 'wip']].forEach(function (pair) {
+        var box = document.getElementById(pair[0]);
+        var list = box && box.querySelector('.ledger');
+        if (!list) return;
+        var mine = rows.filter(function (r) { return r.sec === pair[1]; });
+        list.replaceChildren.apply(list, mine.map(rowEl));
+        var count = box.querySelector('h2 .count');
+        if (count) count.textContent = String(mine.length);
+        if (pair[1] === 'wip') {
+          box.hidden = !mine.length;
+          var link = document.querySelector('#nav a[href="#work-in-progress"]');
+          if (link) link.hidden = !mine.length;
+        }
+      });
     }
 
     window.claude.use('mcp').then(function (mcp) {
