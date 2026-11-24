@@ -31,6 +31,7 @@
 - 원고번호(manuscript number)는 CV에 넣지 않는다
 - MRTC 발간물은 연구원 시리즈 이름으로 적는다: MRTC Research Report Series(연구보고서, Basic 은 붙이지 않음), MRTC Policy Report Series(정책보고서), MRTC Working Paper Series(워킹페이퍼), 브리프는 MRTC Issue Brief, MRTC Statistics Brief, MRTC Brief (Issue) 그대로
 - MRTC 발간물에는 시리즈 이름 뒤에 발간번호를 "No. 2025-09" 꼴로 붙인다, 번호는 연구원 누리집 발간물 상세 화면의 발간번호나 발간본 파일 이름에서 확인한 값만 쓰고 과제 폴더 번호(R9, R11 등)는 발간번호와 다를 수 있으니 그대로 옮기지 않는다(2024년 이민과 경제(I)는 폴더 24-R9, 발간번호 2024-03), 발간 전 과제는 HJ 가 알려 준 번호를 쓴다
+- MRTC 발간물의 국문 원제와 공저 표시는 연구원 누리집 발간물 상세 화면의 제목과 저자(책임, 공동)에 맞춘다, 띄어쓰기도 그대로 옮기고 부제 앞에만 쌍점을 둔다, 공동 저자가 등록돼 있으면 책임이 HJ 인 보고서에도 co-authored 를 붙이고 책임 한 사람만 등록돼 있으면 붙이지 않는다, 새 발간물을 올릴 때는 상세 화면에서 발간번호, 제목, 저자를 한 번에 확인한다, 원제의 낱말이 바뀌어 뜻이 달라지면 영문 제목도 같이 고친다
 - Working Papers 와 Work in Progress 의 제목은 Title Case 로 적고, 학술지가 붙이는 접두어(JUE Insight: 등)와 국문 메모는 뺀다, 원고 제목이 다른 꼴이면 _cv_entries.json 의 overrides 에 CV 표기를 적는다, 가제인 원고는 내부 약칭이 아니라 주제가 드러나는 짧은 제목을 같은 자리에 적는다(Work in Progress 절 머리에 제목이 잠정이라는 안내가 있음)
 
 ## 4. 논문 상태가 바뀔 때
@@ -93,3 +94,4 @@
 - 2026-11-22: About 을 HJ 가 준 글로 바꿈(네 문단, 첫 문단은 큰 글씨 머리 문단), 칩을 Research fields(Public Economics, Urban and Regional Economics, Labor Economics)와 Research interests(Place-based Policy, Immigration, Firm Behavior) 두 줄로 나눔
 - 2026-11-24: Policy Research Reports 절의 MRTC 발간물 표기를 연구원 시리즈 이름으로 맞춤(MRTC Basic Research Report 9건 → MRTC Research Report Series, MRTC Policy Report → MRTC Policy Report Series, MRTC Working Paper → MRTC Working Paper Series), 3절에 표기 기준을 더함
 - 2026-11-24(두 번째): MRTC 발간물 14건에 발간번호를 붙임, 2026년 5건(연구보고서 2026-05, 2026-13, 2026-11, 2026-17, 브리프 2026-02)은 HJ 가 알려 준 값, 2024–2025년 9건은 연구원 누리집 발간물 화면과 발간본 파일 이름으로 확인(연구보고서 2025-09, 2025-10, 2025-02, 2024-03, 2024-07, 정책보고서 2024-02, 이슈브리프 2024-06, 워킹페이퍼 2024-01, 통계브리프 2024-07), 3절에 번호 기준을 더함
+- 2026-11-24(세 번째): MRTC 발간물의 국문 원제와 공저 표시를 연구원 누리집 등록 내용에 맞춤, 원제 7건(2025-10 외국인주민 집중거주지역, 2025-02 국내 외국인 유학생, 2024-07 돌봄서비스 외국인력 정책 전망, 2024-02 정책보고서 연구개발에 미치는 영향과 향후 과제, 2024-03 이민과 경제(I), 통계브리프 2024-07 등록 공장과 연도 괄호 앞 빈칸, 브리프 2026-02 두뇌유출), 공저 표시 2건(연구보고서 2025-09 공동 소준영, 정책보고서 2024-02 공동 전봉걸), 돌봄 보고서 영문 제목에서 Introducing 을 뺌, 국민연금 추납 브리프(2026-03)는 누리집 브리프 목록 첫 화면에 없어 그대로 둠, 3절에 기준을 더함
