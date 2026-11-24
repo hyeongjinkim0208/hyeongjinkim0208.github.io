@@ -29,6 +29,7 @@
 - 연도 칸은 게재 연도, Forthcoming, Revise and resubmit, Under review, Submitted, Draft(Working Papers 의 투고 전 초고), In progress(Work in Progress 절) 중 하나로 쓴다
 - 연구비는 지원 기관, 재원 부처, 과제번호를 함께 적는다(예: National Research Foundation of Korea (NRF), funded by the Ministry of Education · NRF-2023S1A5B5A19093456)
 - 원고번호(manuscript number)는 CV에 넣지 않는다
+- MRTC 발간물은 연구원 시리즈 이름으로 적는다: MRTC Research Report Series(연구보고서, Basic 은 붙이지 않음), MRTC Policy Report Series(정책보고서), MRTC Working Paper Series(워킹페이퍼), 브리프는 MRTC Issue Brief, MRTC Statistics Brief, MRTC Brief (Issue) 그대로
 - Working Papers 와 Work in Progress 의 제목은 Title Case 로 적고, 학술지가 붙이는 접두어(JUE Insight: 등)와 국문 메모는 뺀다, 원고 제목이 다른 꼴이면 _cv_entries.json 의 overrides 에 CV 표기를 적는다, 가제인 원고는 내부 약칭이 아니라 주제가 드러나는 짧은 제목을 같은 자리에 적는다(Work in Progress 절 머리에 제목이 잠정이라는 안내가 있음)
 
 ## 4. 논문 상태가 바뀔 때
@@ -89,3 +90,4 @@
 - 2026-11-21: CV 등재를 자동 판정으로 바꾸고 Work in Progress 절을 더함(HJ 결정: 설계 확정과 저자 결정이면 Work in Progress, 통합본이면 Working Papers, 투고 전 초고의 연도 칸은 Draft), cv.list 는 미리 올리는 스위치로만 남기고 hide 를 더함, 목차 번호를 CSS 카운터로 바꿈, 스크립트·실시간 스크립트·상황판 CV 열·sync_body.py 에 같이 반영, 1절, 3절, 4절, 5절, 7절 고침, 첫 실행으로 auto·firm productivity·investment rnd 는 Draft, manuprotection 은 Work in Progress 로 옮기고 factory thresholds 를 Work in Progress 에 더함
 - 2026-11-21(오전, 두 번째): 설계 단계와 저자 미정 원고도 Work in Progress 에 올리기로 함(HJ 결정), 설계 확정과 저자 조건, list 스위치를 없애고 hide 만 남김, 절 머리 안내를 design 포함으로 고침, fireworks 와 reallocation 을 Work in Progress 에 더함(2편 → 4편), firm productivity 의 새 제목 반영, 4절, 7절 고침
 - 2026-11-22: About 을 HJ 가 준 글로 바꿈(네 문단, 첫 문단은 큰 글씨 머리 문단), 칩을 Research fields(Public Economics, Urban and Regional Economics, Labor Economics)와 Research interests(Place-based Policy, Immigration, Firm Behavior) 두 줄로 나눔
+- 2026-11-24: Policy Research Reports 절의 MRTC 발간물 표기를 연구원 시리즈 이름으로 맞춤(MRTC Basic Research Report 9건 → MRTC Research Report Series, MRTC Policy Report → MRTC Policy Report Series, MRTC Working Paper → MRTC Working Paper Series), 3절에 표기 기준을 더함
